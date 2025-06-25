@@ -20,6 +20,10 @@ pub struct Card {
 }
 
 impl Card {
+    pub fn new(rank: u8, suit: Suit) -> Self {
+        Card { rank, suit }
+    }
+
     pub fn display_string(&self) -> String {
         let rank = match self.rank {
             1 => "A".to_string(),

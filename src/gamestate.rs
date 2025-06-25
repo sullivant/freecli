@@ -1,4 +1,4 @@
-use crate::card::Card;
+use crate::card::{Card, Suit};
 use serde::{Serialize, Deserialize};
 use std::fmt::{self, Display, Formatter};
 
@@ -42,4 +42,24 @@ impl Display for GameState {
         Ok(())
     }
 
+}
+
+
+impl GameState {
+    pub fn reset(&self) -> GameState {
+        GameState {
+        freecells: [None, None, None, None],
+        foundations: [None, None, None, None],
+        columns: [
+            vec![Card::new(7, Suit::Spades), Card::new(11, Suit::Clubs)],
+            vec![],
+            vec![Card::new(13, Suit::Diamonds)],
+            vec![],
+            vec![],
+            vec![],
+            vec![],
+            vec![Card::new(5, Suit::Hearts)],
+        ],
+    }
+    }
 }
