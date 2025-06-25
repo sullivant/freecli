@@ -46,19 +46,19 @@ impl Display for GameState {
 
 
 impl GameState {
-    pub fn reset(&self) -> GameState {
+    pub fn reset() -> GameState {
         GameState {
         freecells: [None, None, None, None],
         foundations: [None, None, None, None],
         columns: [
-            vec![Card::new(7, Suit::Spades), Card::new(11, Suit::Clubs)],
-            vec![],
-            vec![Card::new(13, Suit::Diamonds)],
             vec![],
             vec![],
             vec![],
             vec![],
-            vec![Card::new(5, Suit::Hearts)],
+            vec![],
+            vec![],
+            vec![],
+            vec![],
         ],
     }
     }
