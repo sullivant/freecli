@@ -26,10 +26,10 @@ impl Card {
 
     pub fn display_string(&self) -> String {
         let rank = match self.rank {
-            1 => "A".to_string(),
-            11 => "J".to_string(),
-            12 => "Q".to_string(),
-            13 => "K".to_string(),
+            1 => " A".to_string(),
+            11 => " J".to_string(),
+            12 => " Q".to_string(),
+            13 => " K".to_string(),
             n => format!("{:>2}", n).to_string(),
         };
     
