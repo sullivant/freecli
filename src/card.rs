@@ -1,9 +1,5 @@
 use console::Style;
 use serde::{Serialize, Deserialize};
-use std::fmt::{self, Display, Formatter};
-
-
-
 
 #[derive(Copy, Clone, Debug, Serialize, Deserialize)]
 pub enum Suit {

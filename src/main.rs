@@ -2,9 +2,8 @@ use clap::Parser;
 // use freecli::card::{Card, Suit};
 use freecli::gamestate::GameState;
 use freecli::io::{load_game, save_game, delete_game};
-use freecli::moves::{LocationType, Move};
+use freecli::moves::{Move};
 use freecli::cli::{AppArgs};
-use std::io::{self, Write};
 use std::process;
 
 
@@ -12,7 +11,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let game_file = "game_state.json";
     let mut args = AppArgs::parse();
 
-    println!("{:?}", args);
+    // println!("{:?}", args);
 
     if args.reset {
         println!("Resetting save game file and starting fresh.");
@@ -47,8 +46,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // If we are not just printing, we should apply this move, too.
     if !args.print {
-        println!("Applying move.\n\n");
-
         match game.apply_move(mv) {
             Ok(_) => {
                 println!("{}", game);

@@ -3,10 +3,8 @@ use crate::moves::{LocationType, Move};
 use console::Style;
 use serde::{Serialize, Deserialize};
 use std::fmt::{self, Display, Formatter};
-use std::panic::Location;
 use rand::seq::SliceRandom;
 use rand::thread_rng;
-use std::cmp::max;
 
 
 
