@@ -1,4 +1,4 @@
-use std::fs::{File, OpenOptions};
+use std::fs::{File, OpenOptions, remove_file};
 use std::io::{Read, Write};
 use crate::gamestate::GameState;
 use serde_json;
@@ -23,4 +23,9 @@ pub fn load_game(path: &str) -> Result<GameState, Box<dyn std::error::Error>> {
     file.read_to_string(&mut contents)?;
     let game: GameState = serde_json::from_str(&contents)?;
     Ok(game)
+}
+
+pub fn delete_game(path: &str) -> Result<(), Box<dyn std::error::Error>> {
+    remove_file(path)?;
+    Ok(())
 }
