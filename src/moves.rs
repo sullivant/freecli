@@ -39,7 +39,7 @@ pub fn parse_location_type(input: &str) -> Result<LocationType, String> {
     match input.to_lowercase().as_str() {
         "col" | "column" => Ok(LocationType::Column),
         "cell" | "freecell" => Ok(LocationType::Freecell),
-        "fnd" | "foundation"  => Ok(LocationType::Freecell),
+        "fnd" | "foundation"  => Ok(LocationType::Foundation),
         _ => Err(format!("Invalid location type: {}", input)),
     }
 }

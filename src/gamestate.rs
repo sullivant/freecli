@@ -1,7 +1,9 @@
 use crate::card::{Card, Suit};
+use crate::moves::{LocationType, Move};
 use console::Style;
 use serde::{Serialize, Deserialize};
 use std::fmt::{self, Display, Formatter};
+use std::panic::Location;
 use rand::seq::SliceRandom;
 use rand::thread_rng;
 use std::cmp::max;
@@ -95,5 +97,92 @@ impl GameState {
         deck.shuffle(&mut rng);
 
         deck
+    }
+
+    pub fn apply_move(&mut self, mv: Move) -> Result<(), String> {
+        match (mv.from, mv.to) {
+            (LocationType::Column, LocationType::Column) => {
+                // Col to Col move.
+                let card = self.columns.get_mut(mv.from_idx)
+                    .ok_or("Invalid source column")?.pop()
+                    .ok_or("Source column is empty.")?;
+
+                self.columns.get_mut(mv.to_idx)
+                    .ok_or("Target column invalid.")?
+                    .push(card);
+
+                Ok(())
+            },
+            (LocationType::Column, LocationType::Freecell) => {
+                let card = self.columns.get_mut(mv.from_idx)
+                    .ok_or("Invalid source column")?.pop()
+                    .ok_or("Source column is empty.")?;
+
+                let cell = self.freecells.get_mut(mv.to_idx)
+                    .ok_or("Invalid target freecell.")?;
+
+                if cell.is_some() {
+                    return Err("Freecell is already occupied.".into());
+                }
+
+                *cell = Some(card);
+
+                Ok(())
+            },
+            (LocationType::Freecell, LocationType::Column) => {
+                let card = self.freecells.get_mut(mv.from_idx)
+                    .ok_or("Invalid freecell index.")?
+                    .take()
+                    .ok_or("Freecell is empty.")?;
+
+                self.columns.get_mut(mv.to_idx)
+                    .ok_or("Invalid destination column")?
+                    .push(card);
+
+                Ok(())
+            },
+            (LocationType::Column, LocationType::Foundation) => {
+                let card = self.columns.get_mut(mv.from_idx)
+                    .ok_or("Invalid source column")?.pop()
+                    .ok_or("Source column is empty.")?;
+
+                self.place_in_foundation(card)
+            },
+            (LocationType::Freecell, LocationType::Foundation) => {
+                let card = self.freecells.get_mut(mv.from_idx)
+                    .ok_or("Invalid freecell index.")?
+                    .take()
+                    .ok_or("Freecell is empty.")?;
+
+                self.place_in_foundation(card)
+            },
+
+            _ => Err("Unsupported move combination".into()),
+        }
+
+    }
+
+    fn place_in_foundation(&mut self, card: Card) -> Result<(), String> {
+        let index = match card.suit {
+            Suit::Spades => 0,
+            Suit::Hearts => 1,
+            Suit::Diamonds => 2,
+            Suit::Clubs => 3
+        };
+
+        let foundation = &mut self.foundations[index];
+
+        match foundation {
+            Some(top) if card.rank == top.rank + 1 => {
+                *foundation = Some(card); // Do the actual place if it can apply here
+                Ok(())
+            },
+            None if card.rank == 1 => {
+                *foundation = Some(card);
+                Ok(())
+            },
+            _ => Err("Invalid foundation move!".into()),
+            // TODO: When invalid move, place it back into the source location!
+        }
     }
 }

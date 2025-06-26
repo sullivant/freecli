@@ -10,7 +10,7 @@ use std::process;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let game_file = "game_state.json";
-    let args = AppArgs::parse();
+    let mut args = AppArgs::parse();
 
     println!("{:?}", args);
 
@@ -23,14 +23,24 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         Ok(g) => g,
         Err(_) => {
             println!("No save game found.  Creating new.");
+            args.reset = true;
             GameState::reset()
         }
     };
+
+    // If we have reset or had to create from scratch, no sense in applying a move.  Just display and save.
+    if args.reset {
+        println!("{}", game);
+        cleanup(game, game_file)?;
+        process::exit(1);
+    }
+
     
     let mv = match Move::from_args(&args.ft, args.fi, &args.tt, args.ti) {
         Ok(mv) => mv,
         Err(e) => {
             eprintln!("Invalid Move: {}", e);
+            println!("{}", game);
             process::exit(1);
         }
     };
@@ -38,12 +48,22 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // If we are not just printing, we should apply this move, too.
     if !args.print {
         println!("Applying move.\n\n");
+
+        match game.apply_move(mv) {
+            Ok(_) => {
+                println!("{}", game);
+                cleanup(game, game_file)?;
+            },
+            Err(e) => {
+                eprintln!("Move failed: {}\n", e);
+                println!("{}", game);
+                process::exit(1);
+            }
+        }
+    } else {
+        println!("{}", game);
     }
     
-    println!("Current game:");
-    println!("{}", game);
-
-    cleanup(game, game_file)?;
 
     Ok(())
 }
