@@ -1,5 +1,5 @@
 
-use clap::Parser;
+use clap::{Parser, ValueEnum};
 
 #[derive(Parser, Debug)]
 #[command(name = "freecli")]
@@ -11,36 +11,25 @@ pub struct AppArgs {
     #[arg(long)]
     pub print: bool,
 
-    // Columns
-    #[arg(long)]
-    pub c0: bool,
-    #[arg(long)]
-    pub c1: bool,
-    #[arg(long)]
-    pub c2: bool,
-    #[arg(long)]
-    pub c3: bool,
-    #[arg(long)]
-    pub c4: bool,
-    #[arg(long)]
-    pub c5: bool,
-    #[arg(long)]
-    pub c6: bool,
-    #[arg(long)]
-    pub c7: bool,
+    #[arg(value_enum)]
+    pub positions: Vec<LocationArg>,
+}
+
+#[derive(Debug, Clone, ValueEnum)]
+pub enum LocationArg {
+    C0,
+    C1,
+    C2,
+    C3,
+    C4,
+    C5,
+    C6,
+    C7,
     
-    // Free cells
-    #[arg(long)]
-    pub f0: bool,
-    #[arg(long)]
-    pub f1: bool,
-    #[arg(long)]
-    pub f2: bool,
-    #[arg(long)]
-    pub f3: bool,
+    F0,
+    F1,
+    F2,
+    F3,
 
-    // Foundations
-    #[arg(long)]
-    pub foundation: bool,
-
+    Foundation,
 }

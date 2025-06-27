@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::cli::AppArgs;
+use crate::cli::LocationArg;
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub enum LocationType {
@@ -18,47 +18,42 @@ pub struct Move {
 }
 
 impl Move {
-    pub fn from_args( args: &AppArgs ) -> Result<Option<Self>, String> {
-        let mut flags = Vec::new(); // Our flags as set.
-
-        for (i, &set) in [
-            args.c0, args.c1, args.c2, args.c3, args.c4, args.c5, args.c6, args.c7,
-        ].iter().enumerate() {
-            if set {
-                flags.push((LocationType::Column, i, format!("--c{}",i)));
-            }
-        }
-
-        for (i, &set) in [
-            args.f0, args.f1, args.f2, args.f3,
-        ].iter().enumerate() {
-            if set {
-                flags.push((LocationType::Freecell, i, format!("--f{}",i)));
-            }
-        }
-
-        if args.foundation {
-            flags.push((LocationType::Foundation, 0, "--foundation".to_string()));
-        }
-
-        // Figure out the right order now.
-        match flags.len() {
-            0 => Ok(None), // Not a move
-            1 => Err(format!("Only one move location supplied ({}), need two.",flags[0].2)),
-            2 => {
-                let (from_ty, from_idx, _) = &flags[0];
-                let (to_ty, to_idx, _) = &flags[1];
+    pub fn from_args( locations: &[LocationArg] ) -> Result<Option<Self>, String> {
+        match locations {
+            [] => Ok(None), // No move
+            [from, to] => {
+                let (from_type, from_idx) = convert_location_arg(from);
+                let (to_type, to_idx) = convert_location_arg(to);
 
                 Ok(Some(Move {
-                    from: from_ty.clone(), from_idx: *from_idx,
-                    to: to_ty.clone(), to_idx: *to_idx
+                    from: from_type, from_idx,
+                    to: to_type, to_idx,
                 }))
             },
-            _ => {
-                let names = flags.iter().map(|f| &f.2).cloned().collect::<Vec<_>>();
-                Err(format!("Too many locations provided: {}", names.join(", ")))
-            }
+            _ => Err("You must specify two move locations only.".to_string()),
         }
     }
 }
+
+pub fn convert_location_arg(arg: &LocationArg) -> (LocationType, usize) {
+    use LocationArg::*;
+    match arg {
+        C0 => (LocationType::Column, 0),
+        C1 => (LocationType::Column, 1),
+        C2 => (LocationType::Column, 2),
+        C3 => (LocationType::Column, 3),
+        C4 => (LocationType::Column, 4),
+        C5 => (LocationType::Column, 5),
+        C6 => (LocationType::Column, 6),
+        C7 => (LocationType::Column, 7),
+
+        F0 => (LocationType::Freecell, 0),
+        F1 => (LocationType::Freecell, 1),
+        F2 => (LocationType::Freecell, 2),
+        F3 => (LocationType::Freecell, 3),
+
+        Foundation => (LocationType::Foundation, 0),
+    }
+}
+
 

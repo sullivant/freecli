@@ -1,9 +1,6 @@
 {
   "freecells": [
-    {
-      "rank": 3,
-      "suit": "Diamonds"
-    },
+    null,
     null,
     null,
     null
@@ -67,8 +64,8 @@
         "suit": "Diamonds"
       },
       {
-        "rank": 5,
-        "suit": "Clubs"
+        "rank": 3,
+        "suit": "Diamonds"
       }
     ],
     [
@@ -154,6 +151,10 @@
       },
       {
         "rank": 2,
+        "suit": "Clubs"
+      },
+      {
+        "rank": 5,
         "suit": "Clubs"
       }
     ],

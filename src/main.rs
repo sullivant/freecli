@@ -34,7 +34,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     
-    let mv = match Move::from_args(&args) {
+    let mv = match Move::from_args(&args.positions) {
         Ok(mv) => mv,
         Err(e) => {
             eprintln!("Invalid Move: {}", e);
