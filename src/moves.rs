@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
 
+use crate::cli::AppArgs;
+
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub enum LocationType {
     Column,
@@ -16,31 +18,47 @@ pub struct Move {
 }
 
 impl Move {
-    pub fn from_args( from: &str, from_idx: usize, to: &str, to_idx: usize ) -> Result<Self, String> {
-        let from = parse_location_type(from)?;
-        let to = parse_location_type(to)?;
+    pub fn from_args( args: &AppArgs ) -> Result<Option<Self>, String> {
+        let mut flags = Vec::new(); // Our flags as set.
 
-        let to_idx = match to {
-          LocationType::Foundation => 0, // or from suit later
-          _ => to_idx,
-        };
+        for (i, &set) in [
+            args.c0, args.c1, args.c2, args.c3, args.c4, args.c5, args.c6, args.c7,
+        ].iter().enumerate() {
+            if set {
+                flags.push((LocationType::Column, i, format!("--c{}",i)));
+            }
+        }
 
-        Ok(Self {
-            from: from,
-            from_idx: from_idx,
-            to: to,
-            to_idx: to_idx,
-        })
-    }
-}
+        for (i, &set) in [
+            args.f0, args.f1, args.f2, args.f3,
+        ].iter().enumerate() {
+            if set {
+                flags.push((LocationType::Freecell, i, format!("--f{}",i)));
+            }
+        }
 
+        if args.foundation {
+            flags.push((LocationType::Foundation, 0, "--foundation".to_string()));
+        }
 
-pub fn parse_location_type(input: &str) -> Result<LocationType, String> {
-    match input.to_lowercase().as_str() {
-        "col" | "column" => Ok(LocationType::Column),
-        "cell" | "freecell" => Ok(LocationType::Freecell),
-        "fnd" | "foundation"  => Ok(LocationType::Foundation),
-        _ => Err(format!("Invalid location type: {}", input)),
+        // Figure out the right order now.
+        match flags.len() {
+            0 => Ok(None), // Not a move
+            1 => Err(format!("Only one move location supplied ({}), need two.",flags[0].2)),
+            2 => {
+                let (from_ty, from_idx, _) = &flags[0];
+                let (to_ty, to_idx, _) = &flags[1];
+
+                Ok(Some(Move {
+                    from: from_ty.clone(), from_idx: *from_idx,
+                    to: to_ty.clone(), to_idx: *to_idx
+                }))
+            },
+            _ => {
+                let names = flags.iter().map(|f| &f.2).cloned().collect::<Vec<_>>();
+                Err(format!("Too many locations provided: {}", names.join(", ")))
+            }
+        }
     }
 }
 

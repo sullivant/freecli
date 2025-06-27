@@ -7,6 +7,10 @@ use rand::seq::SliceRandom;
 use rand::thread_rng;
 
 
+/**
+ * Handles printing of the current game state.  
+ */
+
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct GameState {
@@ -17,16 +21,15 @@ pub struct GameState {
 
 impl Display for GameState {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        writeln!(f, "Freecells:   ")?;
+        write!(f, "Freecells:   ")?;
         for cell in &self.freecells {
             match cell {
                 Some(card) => write!(f, "[{}] ", card.display_string())?,
                 None => write!(f, "[   ] ")?,
             }
         }
-        writeln!(f)?;
 
-        writeln!(f, "Foundations:   ")?;
+        write!(f, "Foundations:   ")?;
         for cell in &self.foundations {
             match cell {
                 Some(card) => write!(f, "[{}] ", card.display_string())?,
@@ -77,7 +80,7 @@ impl GameState {
         GameState {
             freecells: [None, None, None, None],
             foundations: [None, None, None, None],
-            columns: columns,
+            columns,
         }
 
     }

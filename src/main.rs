@@ -1,5 +1,4 @@
 use clap::Parser;
-// use freecli::card::{Card, Suit};
 use freecli::gamestate::GameState;
 use freecli::io::{load_game, save_game, delete_game};
 use freecli::moves::{Move};
@@ -35,7 +34,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     
-    let mv = match Move::from_args(&args.ft, args.fi, &args.tt, args.ti) {
+    let mv = match Move::from_args(&args) {
         Ok(mv) => mv,
         Err(e) => {
             eprintln!("Invalid Move: {}", e);
@@ -46,15 +45,17 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // If we are not just printing, we should apply this move, too.
     if !args.print {
-        match game.apply_move(mv) {
-            Ok(_) => {
-                println!("{}", game);
-                cleanup(game, game_file)?;
-            },
-            Err(e) => {
-                eprintln!("Move failed: {}\n", e);
-                println!("{}", game);
-                process::exit(1);
+        if mv.is_some() {
+            match game.apply_move(mv.unwrap()) {
+                Ok(_) => {
+                    println!("{}", game);
+                    cleanup(game, game_file)?;
+                },
+                Err(e) => {
+                    eprintln!("Move failed: {}\n", e);
+                    println!("{}", game);
+                    process::exit(1);
+                }
             }
         }
     } else {

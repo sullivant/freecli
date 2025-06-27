@@ -11,15 +11,36 @@ pub struct AppArgs {
     #[arg(long)]
     pub print: bool,
 
+    // Columns
     #[arg(long)]
-    pub ft: String,  // "col" or "cell"
-
-    #[arg(long, value_name = "NUM")]
-    pub fi: usize,    // zero based
+    pub c0: bool,
+    #[arg(long)]
+    pub c1: bool,
+    #[arg(long)]
+    pub c2: bool,
+    #[arg(long)]
+    pub c3: bool,
+    #[arg(long)]
+    pub c4: bool,
+    #[arg(long)]
+    pub c5: bool,
+    #[arg(long)]
+    pub c6: bool,
+    #[arg(long)]
+    pub c7: bool,
     
+    // Free cells
     #[arg(long)]
-    pub tt: String,    // "col", "cell", or "foundation"
+    pub f0: bool,
+    #[arg(long)]
+    pub f1: bool,
+    #[arg(long)]
+    pub f2: bool,
+    #[arg(long)]
+    pub f3: bool,
 
-    #[arg(long, value_name = "NUM")]
-    pub ti: usize,      // zero based
+    // Foundations
+    #[arg(long)]
+    pub foundation: bool,
+
 }
