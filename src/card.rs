@@ -43,4 +43,22 @@ impl Card {
 
         styled.to_string()
     }
+
+    // If this card's value is less than the other card and its
+    // suit is the opposite in color, we can work with this.
+    pub fn can_stack_onto(&self, other: &Card) -> bool {
+        let this_red = matches!(self.suit, Suit::Diamonds | Suit::Hearts);
+
+        let other_red = matches!(other.suit, Suit::Diamonds | Suit::Hearts);
+
+        if this_red && other_red {
+            return false;
+        }
+
+        if self.rank == (other.rank-1) { 
+            return true
+        }
+
+        false
+    }
 }

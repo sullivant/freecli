@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::cli::LocationArg;
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
 pub enum LocationType {
     Column,
     Freecell,

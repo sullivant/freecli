@@ -100,7 +100,71 @@ impl GameState {
         deck
     }
 
+    /// Does the actually checking of a move to see if it is valid
+    /// 
+    pub fn check_move(&mut self, mv: &Move) -> Result<(), String> {
+        // - Can only move from a non-empty location
+        // - Can only move onto a stack where the color is different and the rank is higher
+        //      (ie: red 2 can stack onto a black 3)
+        // - Foundations must go up in order
+        // Freecells must be empty
+
+        match (mv.from, mv.to) {
+            // Moving from a col to a col
+            (LocationType::Column, LocationType::Column) => {
+                let src = self.columns.get(mv.from_idx).ok_or("Invalid source column.")?;
+                let dst = self.columns.get(mv.to_idx).ok_or("Invalid destination column.")?;
+
+                let card = src.last().ok_or("Source column is empty.")?;
+                if let Some(top_dst) = dst.last() {
+                    if !card.can_stack_onto(top_dst) {
+                        return Err("Illegal move, cannot stack.".into());
+                    }
+                }
+                Ok(())
+            },
+
+            // From a column to a freecell
+            (LocationType::Column, LocationType::Freecell) => {
+                let cell = self.freecells.get(mv.to_idx).ok_or("Invalid freecell index.")?;
+                if cell.is_some() {
+                    return Err("Freecell is occupied!".to_string());
+                }
+                let src = self.columns.get(mv.from_idx).ok_or("Invalid source column.")?;
+                if src.is_empty() {
+                    return Err("Column is empty.".to_string());
+                }
+                Ok(())
+            },
+
+            // Freecell to a column
+            (LocationType::Freecell, LocationType::Column) => {
+                let card = self.freecells.get(mv.from_idx).ok_or("Invalid freecell")?;
+                let dst = self.columns.get(mv.to_idx).ok_or("Invalid destination column.")?;
+                if let Some(top_dst) = dst.last() {
+                    match card {
+                        Some(c) => {
+                            if !c.can_stack_onto(top_dst) {
+                               return Err("Illegal move, cannot stack.".into());
+                            }
+                        },
+                        _ => {return Err("Freecell is empty.".into());}
+                    }                    
+                }
+                Ok(())
+            },
+
+            // Freecell or Column to foundation
+            (LocationType::Column, LocationType::Foundation) | (LocationType::Freecell, LocationType::Foundation) => {
+                //TODO: Foundation stacking logic here.
+                Ok(())
+            },
+            _ => Err("Unsupported move type".into())
+        }
+    }
+
     pub fn apply_move(&mut self, mv: Move) -> Result<(), String> {
+        self.check_move(&mv)?; // If a move is not valid, we'll bubble up the error with a reason.
         match (mv.from, mv.to) {
             (LocationType::Column, LocationType::Column) => {
                 // Col to Col move.
