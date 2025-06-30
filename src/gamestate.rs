@@ -145,7 +145,7 @@ impl GameState {
     /// 
     /// - Can only move from a non-empty location
     /// - Can only move onto a stack where the color is different and the rank is higher
-    ///      (ie: red 2 can stack onto a black 3)
+    ///   (ie: red 2 can stack onto a black 3)
     /// - Foundations must go up in order
     /// - Freecells must be empty
     pub fn check_move(&mut self, mv: &Move) -> Result<(), String> {
