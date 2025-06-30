@@ -5,25 +5,25 @@ use clap::{Parser, ValueEnum};
 #[command(name = "freecli")]
 #[command(about = "A Freecell CLI interface.", long_about = None)]
 pub struct AppArgs {
-    #[arg(long)]
+    #[arg(long, help = "Reset the game and generate a new board.")]
     pub reset: bool,
 
-    #[arg(long)]
+    #[arg(long, help = "Simply print the current game state.")]
     pub print: bool,
 
-    #[arg(long)]
+    #[arg(long, help = "Print more detailed statistics about game wins, attempts, etc.")]
     pub stats: bool,
 
-    #[arg(long)]
+    #[arg(long, help = "Print a history of moves made for this current game.")]
     pub history: bool,
 
-    #[arg(long)]
+    #[arg(long, help = "Undo the last move in the game history.")]
     pub undo: bool,
 
-    #[arg(long)]
+    #[arg(long, help = "Optional, if passed will seed the RNG with the value passed for repeatability.")]
     pub seed: Option<u64>,
 
-    #[arg(value_enum)]
+    #[arg(value_enum, help = "Possible positions in the format of <from> <to>, ie: \"c0 c3\" or \"c6 foundation\"")]
     pub positions: Vec<LocationArg>,
 }
 
