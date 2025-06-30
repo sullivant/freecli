@@ -14,6 +14,9 @@ pub struct AppArgs {
     #[arg(long)]
     pub stats: bool,
 
+    #[arg(long)]
+    pub history: bool,
+
     #[arg(value_enum)]
     pub positions: Vec<LocationArg>,
 }

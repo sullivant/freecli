@@ -22,6 +22,7 @@ pub struct GameState {
     pub freecells: [Option<Card>; 4],
     pub foundations: [Option<Card>; 4],
     pub columns: [Vec<Card>; 8],
+    pub history: Vec<Move>,
 }
 
 impl Display for GameState {
@@ -86,6 +87,7 @@ impl GameState {
             freecells: [None, None, None, None],
             foundations: [None, None, None, None],
             columns,
+            history: Vec::new(),
         }
 
     }
@@ -212,8 +214,18 @@ impl GameState {
         }
     }
 
+    pub fn record_move(&mut self, mv: &Move) -> Result<(), String> {
+        self.history.push(mv.clone());
+
+        Ok(())
+    }
+
     pub fn apply_move(&mut self, mv: Move) -> Result<(), String> {
         self.check_move(&mv)?; // If a move is not valid, we'll bubble up the error with a reason.
+
+        // If we got past our check, let's record the move in the history
+        self.record_move(&mv)?;
+
         match (mv.from, mv.to) {
             (LocationType::Column, LocationType::Column) => {
                 // Col to Col move.

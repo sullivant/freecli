@@ -49,6 +49,20 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         process::exit(1);
     }
     
+    // Print last move
+    if args.history {
+        if game.history.is_empty() {
+            println!("No History.");
+            process::exit(1);
+        }
+        println!("History (oldest first): ");
+        for mv in game.history.iter() {
+            println!("{}", mv);
+        }
+
+        process::exit(1);
+    }
+
     let mv = match Move::from_args(&args.positions) {
         Ok(mv) => mv,
         Err(e) => {

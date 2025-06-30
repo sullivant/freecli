@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use std::fmt::{self, Display, Formatter};
 
 use crate::cli::LocationArg;
 
@@ -9,12 +10,32 @@ pub enum LocationType {
     Foundation,
 }
 
+impl Display for LocationType {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        let name = match self {
+            LocationType::Column => {"C".to_string()},
+            LocationType::Freecell => {"FC".to_string()},
+            LocationType::Foundation => {"FD".to_string()}
+        };
+        
+        write!(f, "{}", name)?;
+        Ok(())
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Move {
     pub from: LocationType,
     pub from_idx: usize,
     pub to: LocationType,
     pub to_idx: usize,
+}
+
+impl Display for Move {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        write!(f,"{}{} -> {}{}", self.from, self.from_idx, self.to, self.to_idx)?;
+        Ok(())
+    }
 }
 
 impl Move {
