@@ -3,3 +3,4 @@ pub mod gamestate;
 pub mod io;
 pub mod moves;
 pub mod cli;
+pub mod stats;

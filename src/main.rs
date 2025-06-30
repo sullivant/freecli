@@ -3,12 +3,19 @@ use freecli::gamestate::GameState;
 use freecli::io::{load_game, save_game, delete_game};
 use freecli::moves::{Move};
 use freecli::cli::{AppArgs};
+use freecli::stats::GameStats;
 use std::process;
+
+static STATS_FILE: &str = ".game_stats.json";
 
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let game_file = "game_state.json";
+
     let mut args = AppArgs::parse();
+
+    // Load the stats
+    let mut stats = GameStats::load(STATS_FILE).unwrap_or_default();
 
     // println!("{:?}", args);
 
@@ -22,6 +29,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         Err(_) => {
             println!("No save game found.  Creating new.");
             args.reset = true;
+            stats.record_game_start();
+            stats.save(STATS_FILE)?;
             GameState::reset()
         }
     };
@@ -29,7 +38,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // If we have reset or had to create from scratch, no sense in applying a move.  Just display and save.
     if args.reset {
         println!("{}", game);
-        cleanup(game, game_file)?;
+        cleanup(game, game_file, stats)?;
         process::exit(1);
     }
 
@@ -48,8 +57,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         if mv.is_some() {
             match game.apply_move(mv.unwrap()) {
                 Ok(_) => {
+                    // Move has been applied ok.  Let's record the move.
+                    stats.record_move();
                     println!("{}", game);
-                    cleanup(game, game_file)?;
+                    cleanup(game, game_file, stats)?;
                 },
                 Err(e) => {
                     eprintln!("Move failed: {}\n", e);
@@ -67,7 +78,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 
-pub fn cleanup(game: GameState, game_file: &str) -> Result<(), Box<dyn std::error::Error>>  {
+pub fn cleanup(game: GameState, game_file: &str, stats: GameStats) -> Result<(), Box<dyn std::error::Error>>  {
     // println!("Saving game state to file {} and exiting...", game_file);
+    stats.save(STATS_FILE)?;
     save_game(&game, game_file)
+    
 }
