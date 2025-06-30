@@ -8,7 +8,12 @@ use rand::thread_rng;
 
 
 /**
- * Handles printing of the current game state.  
+ * Handles various aspects of the current and potential future game states, including:
+ *  - Printing of the state to the CLI
+ *  - Checking to see if an attempted move is valid
+ *  - Reset of the game state 
+ *  - Applying the move if it is valid
+ *  - Checking for a winning condition
  */
 
 
