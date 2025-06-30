@@ -42,6 +42,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         process::exit(1);
     }
 
+    // Just a stats print.
+    if args.stats {
+        println!("{}", stats);
+        cleanup(game, game_file, stats)?;
+        process::exit(1);
+    }
     
     let mv = match Move::from_args(&args.positions) {
         Ok(mv) => mv,
@@ -60,6 +66,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     // Move has been applied ok.  Let's record the move.
                     stats.record_move();
                     println!("{}", game);
+
+                    // Is this a win?
+                    if game.is_win() {
+                        println!("\u{1F389} You won!");
+                        stats.record_win();
+                    }
+
                     cleanup(game, game_file, stats)?;
                 },
                 Err(e) => {

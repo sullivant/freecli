@@ -10,6 +10,23 @@ pub struct GameStats {
     pub total_games_won: usize,
 }
 
+impl Display for GameStats {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        writeln!(f,"Stats:   ")?;
+        writeln!(f,"Games started:      {}", self.total_games_started)?;
+        writeln!(f,"Games won:          {}", self.total_games_won)?;
+        writeln!(f,"Total Moves Made:   {}", self.total_moves)?;
+
+        if self.total_games_started > 0 {
+            let ratio = self.total_games_won as f32 / self.total_games_started as f32;
+            writeln!(f,"Win ratio:          {:.2}", ratio)?;
+        } else {
+            writeln!(f,"Win ratio:          N/A")?;
+        }
+        Ok(())
+    }
+}
+
 impl GameStats {
     // Loads .game_stats.json
     pub fn load(path: &str) -> io::Result<Self> {

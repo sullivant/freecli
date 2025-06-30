@@ -105,6 +105,19 @@ impl GameState {
         deck
     }
 
+    /// Checks if the game stat is in a winning condition, returning TRUE if the game is won.
+    /// 
+    /// Stat for a win is:
+    ///     All columns are empty ("empty")
+    ///     All freecells are empty ("none")
+    /// 
+    /// Since we do not allow discards, foundation is therefore not necessary to check.
+    /// 
+    pub fn is_win(&self) -> bool {
+        self.columns.iter().all(|col| col.is_empty()) &&
+        self.freecells.iter().all(|cell| cell.is_none())
+    }
+
     /// Does the actually checking of a move to see if it is valid
     /// 
     pub fn check_move(&mut self, mv: &Move) -> Result<(), String> {
