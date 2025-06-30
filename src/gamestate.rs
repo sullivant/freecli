@@ -27,7 +27,19 @@ pub struct GameState {
     pub seed: u64,
 }
 
+
+/// Convenience fn to determine the ordinal index for a given card's suit.
+fn get_foundation_index(card: Card) -> usize {
+    match card.suit {
+        Suit::Spades => 0,
+        Suit::Hearts => 1,
+        Suit::Diamonds => 2,
+        Suit::Clubs => 3
+    }
+}
+
 impl Display for GameState {
+    /// The display of the main game state and its formatting over various lines on the CLI
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         write!(f, "Freecells:   ")?;
         for cell in &self.freecells {
@@ -74,9 +86,7 @@ impl Display for GameState {
 
 
 impl GameState {
-    /**
-     * Resets gamestate to an empty board with cards dealt into the columns.
-     */
+    /// Resets gamestate to an empty board with cards dealt into the columns.
     pub fn reset(seed: Option<u64>) -> GameState {
         let mut columns: [Vec<Card>; 8] = Default::default();
 
@@ -99,6 +109,7 @@ impl GameState {
 
     }
 
+    /// Generates a shuffled deck with the rng fed via the supplied seed argument.
     pub fn generate_shuffled_deck(seed: u64) -> Vec<Card> {
         let mut deck = Vec::with_capacity(52);
 
@@ -130,15 +141,14 @@ impl GameState {
         self.freecells.iter().all(|cell| cell.is_none())
     }
 
-    /// Does the actually checking of a move to see if it is valid
+    /// Does the real checking of a move to see if it is valid
     /// 
+    /// - Can only move from a non-empty location
+    /// - Can only move onto a stack where the color is different and the rank is higher
+    ///      (ie: red 2 can stack onto a black 3)
+    /// - Foundations must go up in order
+    /// - Freecells must be empty
     pub fn check_move(&mut self, mv: &Move) -> Result<(), String> {
-        // - Can only move from a non-empty location
-        // - Can only move onto a stack where the color is different and the rank is higher
-        //      (ie: red 2 can stack onto a black 3)
-        // - Foundations must go up in order
-        // Freecells must be empty
-
         match (mv.from, mv.to) {
             // Moving from a col to a col
             (LocationType::Column, LocationType::Column) => {
@@ -224,21 +234,21 @@ impl GameState {
         }
     }
 
+    /// Simply records a provided move into the game state's history vec.
     pub fn record_move(&mut self, mv: &Move) -> Result<(), String> {
         self.history.push(mv.clone());
 
         Ok(())
     }
 
+    /// Does the logical application of a move, but only after it checks it for validity first.
     pub fn apply_move(&mut self, mut mv: Move) -> Result<(), String> {
         self.check_move(&mv)?; // If a move is not valid, we'll bubble up the error with a reason.
 
         match (mv.from, mv.to) {
             (LocationType::Column, LocationType::Column) => {
                 // Col to Col move.
-                let card = self.columns.get_mut(mv.from_idx)
-                    .ok_or("Invalid source column")?.pop()
-                    .ok_or("Source column is empty.")?;
+                let card = self.pop_card_from_column(mv.from_idx)?;
 
                 self.columns.get_mut(mv.to_idx)
                     .ok_or("Target column invalid.")?
@@ -246,9 +256,7 @@ impl GameState {
 
             },
             (LocationType::Column, LocationType::Freecell) => {
-                let card = self.columns.get_mut(mv.from_idx)
-                    .ok_or("Invalid source column")?.pop()
-                    .ok_or("Source column is empty.")?;
+                let card =  self.pop_card_from_column(mv.from_idx)?;
 
                 let cell = self.freecells.get_mut(mv.to_idx)
                     .ok_or("Invalid target freecell.")?;
@@ -259,20 +267,8 @@ impl GameState {
 
                 *cell = Some(card);
             },
-            (LocationType::Freecell, LocationType::Column) => {
-                let card = self.freecells.get_mut(mv.from_idx)
-                    .ok_or("Invalid freecell index.")?
-                    .take()
-                    .ok_or("Freecell is empty.")?;
-
-                self.columns.get_mut(mv.to_idx)
-                    .ok_or("Invalid destination column")?
-                    .push(card);
-            },
             (LocationType::Column, LocationType::Foundation) => {
-                let card = self.columns.get_mut(mv.from_idx)
-                    .ok_or("Invalid source column")?.pop()
-                    .ok_or("Source column is empty.")?;
+                let card = self.pop_card_from_column(mv.from_idx)?;
 
                 // Update the to index based on suit
                 let index = match card.suit {
@@ -287,19 +283,18 @@ impl GameState {
 
                 self.place_in_foundation(card)?
             },
+            (LocationType::Freecell, LocationType::Column) => {
+                let card = self.take_card_from_freecell(mv.from_idx)?;
+
+                self.columns.get_mut(mv.to_idx)
+                    .ok_or("Invalid destination column")?
+                    .push(card);
+            },
             (LocationType::Freecell, LocationType::Foundation) => {
-                let card = self.freecells.get_mut(mv.from_idx)
-                    .ok_or("Invalid freecell index.")?
-                    .take()
-                    .ok_or("Freecell is empty.")?;
+                let card = self.take_card_from_freecell(mv.from_idx)?;
 
                 // Update the to index based on suit
-                let index = match card.suit {
-                    Suit::Spades => 0,
-                    Suit::Hearts => 1,
-                    Suit::Diamonds => 2,
-                    Suit::Clubs => 3
-                };
+                let index = get_foundation_index(card);
 
                 // Update the move with the updated index
                 mv.to_idx = index;
@@ -317,13 +312,24 @@ impl GameState {
 
     }
 
+    /// Pops (pop()) a card from the column at index provided.
+    pub fn pop_card_from_column(&mut self, idx: usize) -> Result<Card, String> {
+         Ok(self.columns.get_mut(idx)
+            .ok_or("Invalid source column")?.pop()
+            .ok_or("Source column is empty.")?)
+    }
+
+    /// Takes (take()) a card from the freecell at index provided.
+    pub fn take_card_from_freecell(&mut self, idx: usize) -> Result<Card, String> {
+        Ok(self.freecells.get_mut(idx)
+            .ok_or("Invalid freecell index.")?
+            .take()
+            .ok_or("Freecell is empty.")?)
+    }
+
+    /// Places a supplied Card into the foundation
     fn place_in_foundation(&mut self, card: Card) -> Result<(), String> {
-        let index = match card.suit {
-            Suit::Spades => 0,
-            Suit::Hearts => 1,
-            Suit::Diamonds => 2,
-            Suit::Clubs => 3
-        };
+        let index = get_foundation_index(card);
 
         let foundation = &mut self.foundations[index];
 
