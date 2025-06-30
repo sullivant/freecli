@@ -68,6 +68,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 
 pub fn cleanup(game: GameState, game_file: &str) -> Result<(), Box<dyn std::error::Error>>  {
-    println!("Saving game state to file {} and exiting...", game_file);
+    // println!("Saving game state to file {} and exiting...", game_file);
     save_game(&game, game_file)
 }

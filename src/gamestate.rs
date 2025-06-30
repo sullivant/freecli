@@ -154,10 +154,41 @@ impl GameState {
                 Ok(())
             },
 
-            // Freecell or Column to foundation
             (LocationType::Column, LocationType::Foundation) | (LocationType::Freecell, LocationType::Foundation) => {
-                //TODO: Foundation stacking logic here.
-                Ok(())
+                let src = self.columns.get(mv.from_idx).ok_or("Invalid source column.")?;
+                let card: &Card = match mv.from {
+                    LocationType::Column => {
+                        src.last().ok_or("Source column is empty.")?
+                    },
+                    LocationType::Freecell => {
+                        &self.freecells.get_mut(mv.from_idx)
+                            .ok_or("Invalid freecell index.")?
+                            .take()
+                            .ok_or("Freecell is empty.")?
+                    },
+                    _ => Err("Invalid source location for a move to foundation")?
+                };
+                
+                let index = match card.suit {
+                    Suit::Spades => 0,
+                    Suit::Hearts => 1,
+                    Suit::Diamonds => 2,
+                    Suit::Clubs => 3
+                };
+
+                let foundation = &mut self.foundations[index];
+
+                // Attempt the actual move here, the actual move will be done later.
+                match foundation {
+                    Some(top) if card.rank == top.rank + 1 => {
+                        Ok(())
+                    },
+                    None if card.rank == 1 => {
+                        Ok(())
+                    },
+                    _ => Err("Invalid foundation move!".into()),
+                    // TODO: When invalid move, place it back into the source location!
+                }
             },
             _ => Err("Unsupported move type".into())
         }
