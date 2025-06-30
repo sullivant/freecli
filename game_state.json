@@ -3,593 +3,240 @@
     null,
     null,
     null,
-    {
-      "rank": 5,
-      "suit": "Diamonds"
-    }
+    null
   ],
   "foundations": [
-    {
-      "rank": 2,
-      "suit": "Spades"
-    },
-    {
-      "rank": 4,
-      "suit": "Hearts"
-    },
-    {
-      "rank": 1,
-      "suit": "Diamonds"
-    },
-    {
-      "rank": 2,
-      "suit": "Clubs"
-    }
+    null,
+    null,
+    null,
+    null
   ],
   "columns": [
     [
       {
-        "rank": 9,
-        "suit": "Diamonds"
-      },
-      {
         "rank": 8,
-        "suit": "Clubs"
-      }
-    ],
-    [
-      {
-        "rank": 3,
-        "suit": "Clubs"
-      },
-      {
-        "rank": 7,
         "suit": "Hearts"
       },
       {
         "rank": 5,
-        "suit": "Spades"
-      },
-      {
-        "rank": 6,
-        "suit": "Spades"
-      },
-      {
-        "rank": 12,
         "suit": "Clubs"
       },
       {
         "rank": 11,
         "suit": "Hearts"
-      }
-    ],
-    [
+      },
       {
-        "rank": 13,
+        "rank": 9,
+        "suit": "Clubs"
+      },
+      {
+        "rank": 11,
         "suit": "Spades"
       },
       {
-        "rank": 4,
-        "suit": "Clubs"
+        "rank": 10,
+        "suit": "Diamonds"
       },
       {
         "rank": 10,
         "suit": "Clubs"
+      }
+    ],
+    [
+      {
+        "rank": 5,
+        "suit": "Spades"
       },
       {
-        "rank": 13,
+        "rank": 12,
         "suit": "Diamonds"
       },
       {
-        "rank": 3,
-        "suit": "Diamonds"
+        "rank": 4,
+        "suit": "Spades"
+      },
+      {
+        "rank": 10,
+        "suit": "Hearts"
+      },
+      {
+        "rank": 10,
+        "suit": "Spades"
       },
       {
         "rank": 2,
         "suit": "Diamonds"
       },
       {
-        "rank": 13,
-        "suit": "Hearts"
-      },
-      {
-        "rank": 12,
-        "suit": "Spades"
-      },
-      {
-        "rank": 11,
+        "rank": 7,
         "suit": "Diamonds"
       }
     ],
     [
       {
+        "rank": 7,
+        "suit": "Spades"
+      },
+      {
+        "rank": 6,
+        "suit": "Spades"
+      },
+      {
         "rank": 4,
         "suit": "Diamonds"
+      },
+      {
+        "rank": 9,
+        "suit": "Hearts"
+      },
+      {
+        "rank": 12,
+        "suit": "Hearts"
+      },
+      {
+        "rank": 3,
+        "suit": "Hearts"
+      },
+      {
+        "rank": 8,
+        "suit": "Spades"
+      }
+    ],
+    [
+      {
+        "rank": 11,
+        "suit": "Clubs"
+      },
+      {
+        "rank": 6,
+        "suit": "Clubs"
+      },
+      {
+        "rank": 13,
+        "suit": "Hearts"
+      },
+      {
+        "rank": 13,
+        "suit": "Spades"
+      },
+      {
+        "rank": 4,
+        "suit": "Hearts"
+      },
+      {
+        "rank": 13,
+        "suit": "Diamonds"
+      },
+      {
+        "rank": 1,
+        "suit": "Clubs"
+      }
+    ],
+    [
+      {
+        "rank": 2,
+        "suit": "Hearts"
+      },
+      {
+        "rank": 2,
+        "suit": "Spades"
+      },
+      {
+        "rank": 3,
+        "suit": "Clubs"
+      },
+      {
+        "rank": 9,
+        "suit": "Diamonds"
+      },
+      {
+        "rank": 5,
+        "suit": "Diamonds"
+      },
+      {
+        "rank": 8,
+        "suit": "Diamonds"
+      }
+    ],
+    [
+      {
+        "rank": 12,
+        "suit": "Spades"
+      },
+      {
+        "rank": 6,
+        "suit": "Diamonds"
+      },
+      {
+        "rank": 1,
+        "suit": "Hearts"
+      },
+      {
+        "rank": 5,
+        "suit": "Hearts"
+      },
+      {
+        "rank": 9,
+        "suit": "Spades"
+      },
+      {
+        "rank": 8,
+        "suit": "Clubs"
+      }
+    ],
+    [
+      {
+        "rank": 3,
+        "suit": "Diamonds"
+      },
+      {
+        "rank": 11,
+        "suit": "Diamonds"
+      },
+      {
+        "rank": 7,
+        "suit": "Hearts"
+      },
+      {
+        "rank": 7,
+        "suit": "Clubs"
+      },
+      {
+        "rank": 6,
+        "suit": "Hearts"
+      },
+      {
+        "rank": 12,
+        "suit": "Clubs"
+      }
+    ],
+    [
+      {
+        "rank": 2,
+        "suit": "Clubs"
+      },
+      {
+        "rank": 13,
+        "suit": "Clubs"
       },
       {
         "rank": 3,
         "suit": "Spades"
-      }
-    ],
-    [
-      {
-        "rank": 8,
-        "suit": "Hearts"
       },
       {
-        "rank": 7,
-        "suit": "Spades"
-      },
-      {
-        "rank": 6,
-        "suit": "Hearts"
-      }
-    ],
-    [
-      {
-        "rank": 11,
-        "suit": "Clubs"
-      },
-      {
-        "rank": 10,
-        "suit": "Hearts"
-      }
-    ],
-    [
-      {
-        "rank": 13,
-        "suit": "Clubs"
-      },
-      {
-        "rank": 12,
+        "rank": 1,
         "suit": "Diamonds"
-      },
-      {
-        "rank": 11,
-        "suit": "Spades"
-      },
-      {
-        "rank": 10,
-        "suit": "Diamonds"
-      },
-      {
-        "rank": 9,
-        "suit": "Clubs"
-      },
-      {
-        "rank": 8,
-        "suit": "Diamonds"
-      },
-      {
-        "rank": 7,
-        "suit": "Clubs"
-      },
-      {
-        "rank": 6,
-        "suit": "Diamonds"
-      }
-    ],
-    [
-      {
-        "rank": 5,
-        "suit": "Clubs"
-      },
-      {
-        "rank": 9,
-        "suit": "Spades"
-      },
-      {
-        "rank": 12,
-        "suit": "Hearts"
-      },
-      {
-        "rank": 10,
-        "suit": "Spades"
-      },
-      {
-        "rank": 9,
-        "suit": "Hearts"
-      },
-      {
-        "rank": 8,
-        "suit": "Spades"
-      },
-      {
-        "rank": 7,
-        "suit": "Diamonds"
-      },
-      {
-        "rank": 6,
-        "suit": "Clubs"
-      },
-      {
-        "rank": 5,
-        "suit": "Hearts"
       },
       {
         "rank": 4,
+        "suit": "Clubs"
+      },
+      {
+        "rank": 1,
         "suit": "Spades"
       }
     ]
   ],
-  "history": [
-    {
-      "from": "Column",
-      "from_idx": 3,
-      "to": "Foundation",
-      "to_idx": 1
-    },
-    {
-      "from": "Column",
-      "from_idx": 7,
-      "to": "Column",
-      "to_idx": 5
-    },
-    {
-      "from": "Column",
-      "from_idx": 1,
-      "to": "Freecell",
-      "to_idx": 0
-    },
-    {
-      "from": "Column",
-      "from_idx": 0,
-      "to": "Column",
-      "to_idx": 1
-    },
-    {
-      "from": "Column",
-      "from_idx": 0,
-      "to": "Foundation",
-      "to_idx": 2
-    },
-    {
-      "from": "Column",
-      "from_idx": 0,
-      "to": "Foundation",
-      "to_idx": 3
-    },
-    {
-      "from": "Column",
-      "from_idx": 3,
-      "to": "Foundation",
-      "to_idx": 1
-    },
-    {
-      "from": "Column",
-      "from_idx": 4,
-      "to": "Column",
-      "to_idx": 3
-    },
-    {
-      "from": "Column",
-      "from_idx": 6,
-      "to": "Column",
-      "to_idx": 0
-    },
-    {
-      "from": "Column",
-      "from_idx": 6,
-      "to": "Column",
-      "to_idx": 7
-    },
-    {
-      "from": "Freecell",
-      "from_idx": 0,
-      "to": "Column",
-      "to_idx": 7
-    },
-    {
-      "from": "Column",
-      "from_idx": 6,
-      "to": "Freecell",
-      "to_idx": 0
-    },
-    {
-      "from": "Column",
-      "from_idx": 6,
-      "to": "Column",
-      "to_idx": 7
-    },
-    {
-      "from": "Column",
-      "from_idx": 6,
-      "to": "Freecell",
-      "to_idx": 1
-    },
-    {
-      "from": "Column",
-      "from_idx": 6,
-      "to": "Freecell",
-      "to_idx": 2
-    },
-    {
-      "from": "Freecell",
-      "from_idx": 0,
-      "to": "Column",
-      "to_idx": 6
-    },
-    {
-      "from": "Freecell",
-      "from_idx": 2,
-      "to": "Column",
-      "to_idx": 6
-    },
-    {
-      "from": "Column",
-      "from_idx": 3,
-      "to": "Freecell",
-      "to_idx": 0
-    },
-    {
-      "from": "Column",
-      "from_idx": 3,
-      "to": "Column",
-      "to_idx": 6
-    },
-    {
-      "from": "Freecell",
-      "from_idx": 0,
-      "to": "Column",
-      "to_idx": 6
-    },
-    {
-      "from": "Column",
-      "from_idx": 5,
-      "to": "Column",
-      "to_idx": 6
-    },
-    {
-      "from": "Column",
-      "from_idx": 4,
-      "to": "Column",
-      "to_idx": 3
-    },
-    {
-      "from": "Column",
-      "from_idx": 4,
-      "to": "Column",
-      "to_idx": 6
-    },
-    {
-      "from": "Column",
-      "from_idx": 0,
-      "to": "Foundation",
-      "to_idx": 1
-    },
-    {
-      "from": "Column",
-      "from_idx": 7,
-      "to": "Freecell",
-      "to_idx": 0
-    },
-    {
-      "from": "Column",
-      "from_idx": 7,
-      "to": "Column",
-      "to_idx": 6
-    },
-    {
-      "from": "Freecell",
-      "from_idx": 0,
-      "to": "Column",
-      "to_idx": 6
-    },
-    {
-      "from": "Column",
-      "from_idx": 4,
-      "to": "Freecell",
-      "to_idx": 0
-    },
-    {
-      "from": "Column",
-      "from_idx": 3,
-      "to": "Freecell",
-      "to_idx": 2
-    },
-    {
-      "from": "Column",
-      "from_idx": 3,
-      "to": "Column",
-      "to_idx": 4
-    },
-    {
-      "from": "Freecell",
-      "from_idx": 2,
-      "to": "Column",
-      "to_idx": 4
-    },
-    {
-      "from": "Column",
-      "from_idx": 3,
-      "to": "Foundation",
-      "to_idx": 0
-    },
-    {
-      "from": "Column",
-      "from_idx": 0,
-      "to": "Column",
-      "to_idx": 4
-    },
-    {
-      "from": "Column",
-      "from_idx": 0,
-      "to": "Column",
-      "to_idx": 2
-    },
-    {
-      "from": "Column",
-      "from_idx": 0,
-      "to": "Foundation",
-      "to_idx": 3
-    },
-    {
-      "from": "Column",
-      "from_idx": 0,
-      "to": "Freecell",
-      "to_idx": 3
-    },
-    {
-      "from": "Column",
-      "from_idx": 4,
-      "to": "Freecell",
-      "to_idx": 2
-    },
-    {
-      "from": "Column",
-      "from_idx": 4,
-      "to": "Column",
-      "to_idx": 0
-    },
-    {
-      "from": "Freecell",
-      "from_idx": 2,
-      "to": "Column",
-      "to_idx": 0
-    },
-    {
-      "from": "Column",
-      "from_idx": 4,
-      "to": "Freecell",
-      "to_idx": 2
-    },
-    {
-      "from": "Column",
-      "from_idx": 4,
-      "to": "Column",
-      "to_idx": 7
-    },
-    {
-      "from": "Freecell",
-      "from_idx": 2,
-      "to": "Column",
-      "to_idx": 7
-    },
-    {
-      "from": "Freecell",
-      "from_idx": 3,
-      "to": "Column",
-      "to_idx": 7
-    },
-    {
-      "from": "Column",
-      "from_idx": 0,
-      "to": "Column",
-      "to_idx": 7
-    },
-    {
-      "from": "Column",
-      "from_idx": 3,
-      "to": "Column",
-      "to_idx": 2
-    },
-    {
-      "from": "Column",
-      "from_idx": 3,
-      "to": "Column",
-      "to_idx": 4
-    },
-    {
-      "from": "Column",
-      "from_idx": 5,
-      "to": "Freecell",
-      "to_idx": 2
-    },
-    {
-      "from": "Column",
-      "from_idx": 5,
-      "to": "Column",
-      "to_idx": 4
-    },
-    {
-      "from": "Column",
-      "from_idx": 1,
-      "to": "Freecell",
-      "to_idx": 3
-    },
-    {
-      "from": "Column",
-      "from_idx": 1,
-      "to": "Column",
-      "to_idx": 3
-    },
-    {
-      "from": "Freecell",
-      "from_idx": 3,
-      "to": "Column",
-      "to_idx": 3
-    },
-    {
-      "from": "Column",
-      "from_idx": 5,
-      "to": "Foundation",
-      "to_idx": 0
-    },
-    {
-      "from": "Column",
-      "from_idx": 5,
-      "to": "Column",
-      "to_idx": 1
-    },
-    {
-      "from": "Column",
-      "from_idx": 0,
-      "to": "Freecell",
-      "to_idx": 3
-    },
-    {
-      "from": "Freecell",
-      "from_idx": 1,
-      "to": "Column",
-      "to_idx": 0
-    },
-    {
-      "from": "Column",
-      "from_idx": 5,
-      "to": "Freecell",
-      "to_idx": 1
-    },
-    {
-      "from": "Column",
-      "from_idx": 5,
-      "to": "Column",
-      "to_idx": 0
-    },
-    {
-      "from": "Freecell",
-      "from_idx": 1,
-      "to": "Column",
-      "to_idx": 5
-    },
-    {
-      "from": "Freecell",
-      "from_idx": 2,
-      "to": "Column",
-      "to_idx": 5
-    },
-    {
-      "from": "Column",
-      "from_idx": 3,
-      "to": "Freecell",
-      "to_idx": 1
-    },
-    {
-      "from": "Column",
-      "from_idx": 3,
-      "to": "Foundation",
-      "to_idx": 1
-    },
-    {
-      "from": "Freecell",
-      "from_idx": 0,
-      "to": "Column",
-      "to_idx": 3
-    },
-    {
-      "from": "Freecell",
-      "from_idx": 1,
-      "to": "Column",
-      "to_idx": 3
-    }
-  ]
+  "history": [],
+  "seed": 13157051936782704131
 }

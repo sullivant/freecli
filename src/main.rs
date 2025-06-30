@@ -27,11 +27,22 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut game = match load_game(game_file) {
         Ok(g) => g,
         Err(_) => {
-            println!("Creating new.");
             args.reset = true;
             stats.record_game_start();
             stats.save(STATS_FILE)?;
-            GameState::reset()
+
+            // If we have passed a seed, use that.
+            match args.seed {
+                Some(_s) => {
+                    println!("Creating new with seed: {}", args.seed.unwrap());
+                    GameState::reset(args.seed)
+                },
+                _ => {
+                    let g = GameState::reset(None);
+                    println!("Created new game with seed: {}", g.seed);
+                    g
+                },
+            }
         }
     };
 

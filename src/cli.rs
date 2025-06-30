@@ -20,6 +20,9 @@ pub struct AppArgs {
     #[arg(long)]
     pub undo: bool,
 
+    #[arg(long)]
+    pub seed: Option<u64>,
+
     #[arg(value_enum)]
     pub positions: Vec<LocationArg>,
 }

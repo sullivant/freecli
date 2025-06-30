@@ -1,10 +1,11 @@
 use crate::card::{Card, Suit};
 use crate::moves::{LocationType, Move};
 use console::Style;
+use rand::{RngCore, SeedableRng};
 use serde::{Serialize, Deserialize};
 use std::fmt::{self, Display, Formatter};
 use rand::seq::SliceRandom;
-use rand::thread_rng;
+use rand::rngs::{OsRng, StdRng}; // For the seed randomization
 
 
 /**
@@ -23,6 +24,7 @@ pub struct GameState {
     pub foundations: [Option<Card>; 4],
     pub columns: [Vec<Card>; 8],
     pub history: Vec<Move>,
+    pub seed: u64,
 }
 
 impl Display for GameState {
@@ -75,9 +77,13 @@ impl GameState {
     /**
      * Resets gamestate to an empty board with cards dealt into the columns.
      */
-    pub fn reset() -> GameState {
+    pub fn reset(seed: Option<u64>) -> GameState {
         let mut columns: [Vec<Card>; 8] = Default::default();
-        let deck = Self::generate_shuffled_deck(); 
+
+        // If the seed is none, we need to randomly generate our own so we can record it
+        let seed = seed.unwrap_or_else(|| OsRng.next_u64());
+
+        let deck = Self::generate_shuffled_deck(seed); 
         // Walk each of the cards, they come preshuffled, and stuff them into the columns.
         for (i, card) in deck.into_iter().enumerate() {
             columns[i % 8].push(card);
@@ -88,20 +94,24 @@ impl GameState {
             foundations: [None, None, None, None],
             columns,
             history: Vec::new(),
+            seed,
         }
 
     }
 
-    pub fn generate_shuffled_deck() -> Vec<Card> {
+    pub fn generate_shuffled_deck(seed: u64) -> Vec<Card> {
         let mut deck = Vec::with_capacity(52);
 
+        // The ordered deck.
         for &suit in &[Suit::Spades, Suit::Hearts, Suit::Clubs, Suit::Diamonds] {
             for rank in 1..=13 {
                 deck.push(Card{ rank, suit});
             }
         }
         
-        let mut rng = thread_rng();
+        // Shuffle according to the seed.
+        let mut rng = StdRng::seed_from_u64(seed);
+
         deck.shuffle(&mut rng);
 
         deck
