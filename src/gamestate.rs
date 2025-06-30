@@ -220,11 +220,8 @@ impl GameState {
         Ok(())
     }
 
-    pub fn apply_move(&mut self, mv: Move) -> Result<(), String> {
+    pub fn apply_move(&mut self, mut mv: Move) -> Result<(), String> {
         self.check_move(&mv)?; // If a move is not valid, we'll bubble up the error with a reason.
-
-        // If we got past our check, let's record the move in the history
-        self.record_move(&mv)?;
 
         match (mv.from, mv.to) {
             (LocationType::Column, LocationType::Column) => {
@@ -237,7 +234,6 @@ impl GameState {
                     .ok_or("Target column invalid.")?
                     .push(card);
 
-                Ok(())
             },
             (LocationType::Column, LocationType::Freecell) => {
                 let card = self.columns.get_mut(mv.from_idx)
@@ -252,8 +248,6 @@ impl GameState {
                 }
 
                 *cell = Some(card);
-
-                Ok(())
             },
             (LocationType::Freecell, LocationType::Column) => {
                 let card = self.freecells.get_mut(mv.from_idx)
@@ -264,15 +258,24 @@ impl GameState {
                 self.columns.get_mut(mv.to_idx)
                     .ok_or("Invalid destination column")?
                     .push(card);
-
-                Ok(())
             },
             (LocationType::Column, LocationType::Foundation) => {
                 let card = self.columns.get_mut(mv.from_idx)
                     .ok_or("Invalid source column")?.pop()
                     .ok_or("Source column is empty.")?;
 
-                self.place_in_foundation(card)
+                // Update the to index based on suit
+                let index = match card.suit {
+                    Suit::Spades => 0,
+                    Suit::Hearts => 1,
+                    Suit::Diamonds => 2,
+                    Suit::Clubs => 3
+                };
+
+                // Update the move with the updated index
+                mv.to_idx = index;
+
+                self.place_in_foundation(card)?
             },
             (LocationType::Freecell, LocationType::Foundation) => {
                 let card = self.freecells.get_mut(mv.from_idx)
@@ -280,11 +283,27 @@ impl GameState {
                     .take()
                     .ok_or("Freecell is empty.")?;
 
-                self.place_in_foundation(card)
+                // Update the to index based on suit
+                let index = match card.suit {
+                    Suit::Spades => 0,
+                    Suit::Hearts => 1,
+                    Suit::Diamonds => 2,
+                    Suit::Clubs => 3
+                };
+
+                // Update the move with the updated index
+                mv.to_idx = index;
+
+                self.place_in_foundation(card)?
             },
 
-            _ => Err("Unsupported move combination".into()),
+            _ => return Err("Unsupported move combination".into()),
         }
+
+        // If we got past our check, let's record the move in the history
+        self.record_move(&mv)?;
+
+        Ok(())
 
     }
 
@@ -310,5 +329,69 @@ impl GameState {
             _ => Err("Invalid foundation move!".into()),
             // TODO: When invalid move, place it back into the source location!
         }
+    }
+
+    pub fn undo(&mut self) -> Result<(), String> {
+        if let Some(m) = self.history.pop() {
+            // Revert the last move before we apply it.
+            let u = Move {
+                from: m.to,
+                from_idx: m.to_idx,
+                to: m.from,
+                to_idx: m.from_idx
+            };
+            println!("Undoing move {} ({})", m, u);
+            self.force_move(u)?;
+        } else {
+            println!("No moves to undo.");
+        }
+        Ok(())
+    }
+
+    // Applies a move in a more "forced" manner, used when reverting.  See undo().
+    pub fn force_move(&mut self, u: Move) -> Result<(), String> {
+        let card = match u.from {
+            LocationType::Column => {self.columns.get_mut(u.from_idx)
+                .ok_or("Invalid source column")?.pop()
+                .ok_or("Source column is empty.")?
+            },
+            LocationType::Freecell => {self.freecells.get_mut(u.from_idx)
+                .ok_or("Invalid freecell index.")?
+                .take()
+                .ok_or("Freecell is empty.")?
+            },
+            LocationType::Foundation => {self.foundations.get_mut(u.from_idx)
+                .ok_or("Invalid foundation index.")?
+                .take()
+                .ok_or(format!("Foundation is empty at index {}.", u.from_idx))?
+            },
+        };
+
+        match u.to {
+            LocationType::Column => {
+                self.columns.get_mut(u.to_idx)
+                    .ok_or("Invalid destination column")?
+                    .push(card);
+                
+                Ok(())
+            },
+            LocationType::Freecell => {
+                let cell = self.freecells.get_mut(u.to_idx)
+                    .ok_or("Invalid target freecell.")?;
+
+                if cell.is_some() {
+                    return Err("Freecell is already occupied.".into());
+                }
+
+                *cell = Some(card);
+
+                Ok(())
+            },
+            LocationType::Foundation => {
+                self.place_in_foundation(card)?;
+                Ok(())
+            }
+        }
+
     }
 }

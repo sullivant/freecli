@@ -14,8 +14,8 @@ impl Display for LocationType {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         let name = match self {
             LocationType::Column => {"C".to_string()},
-            LocationType::Freecell => {"FC".to_string()},
-            LocationType::Foundation => {"FD".to_string()}
+            LocationType::Freecell => {"Freecell ".to_string()},
+            LocationType::Foundation => {"Foundation ".to_string()}
         };
         
         write!(f, "{}", name)?;
@@ -33,7 +33,16 @@ pub struct Move {
 
 impl Display for Move {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        write!(f,"{}{} -> {}{}", self.from, self.from_idx, self.to, self.to_idx)?;
+        let source = match self.from {
+            LocationType::Foundation => format!("{}", self.from),
+            _ => format!("{}{}", self.from, self.from_idx)
+        };
+        let target = match self.to {
+            LocationType::Foundation => format!("{}", self.to),
+            _ => format!("{}{}", self.to, self.to_idx)
+        };
+
+        write!(f,"{} -> {}", source, target)?;
         Ok(())
     }
 }

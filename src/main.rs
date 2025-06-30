@@ -27,7 +27,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut game = match load_game(game_file) {
         Ok(g) => g,
         Err(_) => {
-            println!("No save game found.  Creating new.");
+            println!("Creating new.");
             args.reset = true;
             stats.record_game_start();
             stats.save(STATS_FILE)?;
@@ -60,6 +60,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             println!("{}", mv);
         }
 
+        process::exit(1);
+    }
+
+    // Undo last move
+    if args.undo {
+        game.undo()?;
+        println!("{}", game);
+        cleanup(game, game_file, stats)?;
         process::exit(1);
     }
 
