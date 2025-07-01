@@ -17,3 +17,22 @@ Columns:
 ```
 
 
+```text
+A Freecell CLI interface.
+
+Usage: freecli [OPTIONS] [POSITIONS]...
+
+Arguments:
+  [POSITIONS]...  Possible positions in the format of <from> <to>, ie: "c0 c3" or "c6 foundation" [possible values: c0, c1, c2, c3, c4, c5, c6, c7, f0, f1, f2, f3, foundation]
+
+Options:
+      --reset        Reset the game and generate a new board.
+      --print        Simply print the current game state.
+      --stats        Print more detailed statistics about game wins, attempts, etc.
+      --history      Print a history of moves made for this current game.
+      --undo         Undo the last move in the game history.
+      --seed <SEED>  Optional, if passed will seed the RNG with the value passed for repeatability.
+  -h, --help         Print help
+  -V, --version      Print version
+  ```
+  
