@@ -25,6 +25,7 @@ pub struct GameState {
     pub columns: [Vec<Card>; 8],
     pub history: Vec<Move>,
     pub seed: u64,
+    pub last_move_error: Option<String>,
 }
 
 
@@ -41,6 +42,22 @@ fn get_foundation_index(card: Card) -> usize {
 impl Display for GameState {
     /// The display of the main game state and its formatting over various lines on the CLI
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+
+        // Handle printing the error or the last move from the stack if the error is None
+        match &self.last_move_error {
+            Some(e) => {
+                writeln!(f,"Error: {}", e)?;
+            },
+            None => {
+                // Get last move off the history stack
+                let last_move = self.get_last_move();
+                match last_move {
+                    Some(m) => writeln!(f, "Last Move: {}", m)?,
+                    None => {},
+                };
+            }
+        };
+        
         write!(f, "Freecells:   ")?;
         for cell in &self.freecells {
             match cell {
@@ -105,6 +122,7 @@ impl GameState {
             columns,
             history: Vec::new(),
             seed,
+            last_move_error: None,
         }
 
     }
@@ -345,6 +363,12 @@ impl GameState {
             _ => Err("Invalid foundation move!".into()),
             // TODO: When invalid move, place it back into the source location!
         }
+    }
+
+    /// Copies the last move off of the stack for review on the CLI when printing. 
+    /// Just a convenience method, really.
+    pub fn get_last_move(&self) -> Option<&Move> {
+        self.history.last()
     }
 
     pub fn undo(&mut self) -> Result<(), String> {

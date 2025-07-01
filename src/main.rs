@@ -44,17 +44,17 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     };
 
-    // If we have reset or had to create from scratch, no sense in applying a move.  Just display and save.
-    if args.reset {
-        println!("{}", game);
-        cleanup(&game, game_file, &stats)?;
+    // If we are just printing, let's clear the last error because there is none. Then print.
+    if args.print {
+        game.last_move_error = None;
+        cleanup(&game, game_file, &stats, &args)?;
         process::exit(1);
     }
 
     // Just a stats print.
     if args.stats {
         println!("{}", stats);
-        cleanup(&game, game_file, &stats)?;
+        cleanup(&game, game_file, &stats, &args)?;
         process::exit(1);
     }
     
@@ -75,17 +75,17 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Undo last move
     if args.undo {
         game.undo()?;
-        println!("{}", game);
-        cleanup(&game, game_file, &stats)?;
+        cleanup(&game, game_file, &stats, &args)?;
         process::exit(1);
     }
 
     let mv = match Move::from_args(&args.positions) {
         Ok(mv) => mv,
         Err(e) => {
-            eprintln!("Invalid Move: {}", e);
-            println!("{}", game);
-            process::exit(1);
+            game.last_move_error = format!("Invalid Move: {}", e).into();
+            // println!("{}", game);
+            // process::exit(1);
+            None
         }
     };
 
@@ -93,33 +93,38 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     if mv.is_some() {
         match game.apply_move(mv.unwrap()) {
             Ok(_) => {
-                // Move has been applied ok.  Let's record the move.
+                // Move has been applied ok.  Let's record the lack "None" of an error.
+                game.last_move_error = None;
                 stats.record_move();
             },
             Err(e) => {
-                eprintln!("Move failed: {}\n", e);
-                println!("{}", game);
-                process::exit(1);
+                // Move failed.  It's not applied.  But let's update status.
+                game.last_move_error = format!("Move failed: {}", e).into();
             }
         }
     }
     
-    // Always going to cleanup and print before we leave.
-    cleanup(&game, game_file, &stats)?;
-    println!("{}", game);
-
     // But if we have won, print that too!
     if game.is_win() {
         println!("\u{1F389} You won!");
         stats.record_win();
     }
 
+    // Always going to cleanup and print before we leave.
+    cleanup(&game, game_file, &stats, &args)?;
+
     Ok(())
 }
 
 
-pub fn cleanup(game: &GameState, game_file: &str, stats: &GameStats) -> Result<(), Box<dyn std::error::Error>>  {
-    // println!("Saving game state to file {} and exiting...", game_file);
+pub fn cleanup(game: &GameState, game_file: &str, stats: &GameStats, args: &AppArgs) -> Result<(), Box<dyn std::error::Error>>  {
+   
+    if args.json {
+        println!("{}", serde_json::to_string_pretty(&game).unwrap());
+    } else { 
+        println!("{}", game);
+    }
+
     stats.save(STATS_FILE)?;
     save_game(&game, game_file)
     

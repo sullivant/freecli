@@ -24,6 +24,9 @@ pub struct AppArgs {
     #[arg(long, help = "Optional, if passed will seed the RNG with the value passed for repeatability.")]
     pub seed: Option<u64>,
 
+    #[arg(long, help = "Optional, output state of game and move attempt result in JSON instead of pretty printing.")]
+    pub json: bool,
+
     #[arg(value_enum, help = "Possible positions in the format of <from> <to>, ie: \"c0 c3\" or \"c6 foundation\"")]
     pub positions: Vec<LocationArg>,
 }
@@ -43,6 +46,6 @@ pub enum LocationArg {
     F1,
     F2,
     F3,
-
+    
     Foundation,
 }
