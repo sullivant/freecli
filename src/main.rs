@@ -17,8 +17,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Load the stats
     let mut stats = GameStats::load(STATS_FILE).unwrap_or_default();
 
-    // println!("{:?}", args);
-
     if args.reset {
         println!("Resetting save game file and starting fresh.");
         let _ = delete_game(game_file);
@@ -49,18 +47,18 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // If we have reset or had to create from scratch, no sense in applying a move.  Just display and save.
     if args.reset {
         println!("{}", game);
-        cleanup(game, game_file, stats)?;
+        cleanup(&game, game_file, &stats)?;
         process::exit(1);
     }
 
     // Just a stats print.
     if args.stats {
         println!("{}", stats);
-        cleanup(game, game_file, stats)?;
+        cleanup(&game, game_file, &stats)?;
         process::exit(1);
     }
     
-    // Print last move
+    // Print move history
     if args.history {
         if game.history.is_empty() {
             println!("No History.");
@@ -78,7 +76,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     if args.undo {
         game.undo()?;
         println!("{}", game);
-        cleanup(game, game_file, stats)?;
+        cleanup(&game, game_file, &stats)?;
         process::exit(1);
     }
 
@@ -91,40 +89,36 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     };
 
-    // If we are not just printing, we should apply this move, too.
-    if !args.print {
-        if mv.is_some() {
-            match game.apply_move(mv.unwrap()) {
-                Ok(_) => {
-                    // Move has been applied ok.  Let's record the move.
-                    stats.record_move();
-                    println!("{}", game);
-
-                    // Is this a win?
-                    if game.is_win() {
-                        println!("\u{1F389} You won!");
-                        stats.record_win();
-                    }
-
-                    cleanup(game, game_file, stats)?;
-                },
-                Err(e) => {
-                    eprintln!("Move failed: {}\n", e);
-                    println!("{}", game);
-                    process::exit(1);
-                }
+    // If move is something (is_some()) - let's try to apply it.
+    if mv.is_some() {
+        match game.apply_move(mv.unwrap()) {
+            Ok(_) => {
+                // Move has been applied ok.  Let's record the move.
+                stats.record_move();
+            },
+            Err(e) => {
+                eprintln!("Move failed: {}\n", e);
+                println!("{}", game);
+                process::exit(1);
             }
         }
-    } else {
-        println!("{}", game);
     }
     
+    // Always going to cleanup and print before we leave.
+    cleanup(&game, game_file, &stats)?;
+    println!("{}", game);
+
+    // But if we have won, print that too!
+    if game.is_win() {
+        println!("\u{1F389} You won!");
+        stats.record_win();
+    }
 
     Ok(())
 }
 
 
-pub fn cleanup(game: GameState, game_file: &str, stats: GameStats) -> Result<(), Box<dyn std::error::Error>>  {
+pub fn cleanup(game: &GameState, game_file: &str, stats: &GameStats) -> Result<(), Box<dyn std::error::Error>>  {
     // println!("Saving game state to file {} and exiting...", game_file);
     stats.save(STATS_FILE)?;
     save_game(&game, game_file)

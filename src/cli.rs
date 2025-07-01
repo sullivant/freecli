@@ -3,6 +3,7 @@ use clap::{Parser, ValueEnum};
 
 #[derive(Parser, Debug)]
 #[command(name = "freecli")]
+#[command(version = "0.1.0")]
 #[command(about = "A Freecell CLI interface.", long_about = None)]
 pub struct AppArgs {
     #[arg(long, help = "Reset the game and generate a new board.")]

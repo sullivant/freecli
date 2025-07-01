@@ -18,7 +18,7 @@ use rand::rngs::{OsRng, StdRng}; // For the seed randomization
  */
 
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct GameState {
     pub freecells: [Option<Card>; 4],
     pub foundations: [Option<Card>; 4],
