@@ -106,7 +106,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     
     // But if we have won, print that too!
     if game.is_win() {
-        println!("\u{1F389} You won!");
+        if !args.json { println!("\u{1F389} You won!"); }
         stats.record_win();
     }
 

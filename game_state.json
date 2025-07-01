@@ -126,10 +126,6 @@
       {
         "rank": 9,
         "suit": "Spades"
-      },
-      {
-        "rank": 2,
-        "suit": "Diamonds"
       }
     ],
     [
@@ -208,6 +204,10 @@
       {
         "rank": 3,
         "suit": "Clubs"
+      },
+      {
+        "rank": 2,
+        "suit": "Diamonds"
       }
     ],
     [
@@ -237,7 +237,14 @@
       }
     ]
   ],
-  "history": [],
+  "history": [
+    {
+      "from": "Column",
+      "from_idx": 3,
+      "to": "Column",
+      "to_idx": 6
+    }
+  ],
   "seed": 430999353324710647,
   "last_move_error": null
 }
