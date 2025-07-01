@@ -7,10 +7,9 @@ use freecli::stats::GameStats;
 use std::process;
 
 static STATS_FILE: &str = ".game_stats.json";
-
+static GAMESTATE_FILE: &str = "game_state.json";
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let game_file = "game_state.json";
 
     let mut args = AppArgs::parse();
 
@@ -19,10 +18,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     if args.reset {
         println!("Resetting save game file and starting fresh.");
-        let _ = delete_game(game_file);
+        let _ = delete_game(GAMESTATE_FILE);
     }
 
-    let mut game = match load_game(game_file) {
+    let mut game = match load_game(GAMESTATE_FILE) {
         Ok(g) => g,
         Err(_) => {
             args.reset = true;
@@ -47,14 +46,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // If we are just printing, let's clear the last error because there is none. Then print.
     if args.print {
         game.last_move_error = None;
-        cleanup(&game, game_file, &stats, &args)?;
+        cleanup(&game, &stats, &args)?;
         process::exit(1);
     }
 
     // Just a stats print.
     if args.stats {
         println!("{}", stats);
-        cleanup(&game, game_file, &stats, &args)?;
+        cleanup(&game, &stats, &args)?;
         process::exit(1);
     }
     
@@ -75,7 +74,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Undo last move
     if args.undo {
         game.undo()?;
-        cleanup(&game, game_file, &stats, &args)?;
+        cleanup(&game, &stats, &args)?;
         process::exit(1);
     }
 
@@ -112,13 +111,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     // Always going to cleanup and print before we leave.
-    cleanup(&game, game_file, &stats, &args)?;
+    cleanup(&game, &stats, &args)?;
 
     Ok(())
 }
 
 
-pub fn cleanup(game: &GameState, game_file: &str, stats: &GameStats, args: &AppArgs) -> Result<(), Box<dyn std::error::Error>>  {
+pub fn cleanup(game: &GameState, stats: &GameStats, args: &AppArgs) -> Result<(), Box<dyn std::error::Error>>  {
    
     if args.json {
         println!("{}", serde_json::to_string_pretty(&game).unwrap());
@@ -127,6 +126,6 @@ pub fn cleanup(game: &GameState, game_file: &str, stats: &GameStats, args: &AppA
     }
 
     stats.save(STATS_FILE)?;
-    save_game(game, game_file)
+    save_game(game, GAMESTATE_FILE)
     
 }
