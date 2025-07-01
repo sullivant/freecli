@@ -82,7 +82,7 @@ pub fn convert_location_arg(arg: &LocationArg) -> (LocationType, usize) {
         F2 => (LocationType::Freecell, 2),
         F3 => (LocationType::Freecell, 3),
 
-        Foundation => (LocationType::Foundation, 0),
+        Foundation | Fnd => (LocationType::Foundation, 0),
     }
 }
 

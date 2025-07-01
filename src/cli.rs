@@ -48,4 +48,5 @@ pub enum LocationArg {
     F3,
 
     Foundation,
+    Fnd,
 }
