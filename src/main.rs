@@ -104,8 +104,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     }
     
-    // But if we have won, print that too!
-    if game.is_win() {
+    // But if we have won, print that too!  Only check if this move is not an error anyway.
+    
+    if game.last_move_error.is_none() && game.is_win() {
         if !args.json { println!("\u{1F389} You won!"); }
         stats.record_win();
     }
