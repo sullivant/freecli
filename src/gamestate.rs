@@ -51,10 +51,9 @@ impl Display for GameState {
             None => {
                 // Get last move off the history stack
                 let last_move = self.get_last_move();
-                match last_move {
-                    Some(m) => writeln!(f, "Last Move: {}", m)?,
-                    None => {},
-                };
+                if let Some(m) = last_move {
+                    writeln!(f, "Last Move: {}", m)?;
+                }
             }
         };
         

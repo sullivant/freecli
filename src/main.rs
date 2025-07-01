@@ -126,6 +126,6 @@ pub fn cleanup(game: &GameState, game_file: &str, stats: &GameStats, args: &AppA
     }
 
     stats.save(STATS_FILE)?;
-    save_game(&game, game_file)
+    save_game(game, game_file)
     
 }
