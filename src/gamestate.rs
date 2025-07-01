@@ -212,20 +212,20 @@ impl GameState {
             },
 
             (LocationType::Column, LocationType::Foundation) | (LocationType::Freecell, LocationType::Foundation) => {
-                let src = self.columns.get(mv.from_idx).ok_or("Invalid source column.")?;
+
                 let card: &Card = match mv.from {
                     LocationType::Column => {
+                        let src = self.columns.get(mv.from_idx).ok_or("Invalid source column.")?;
                         src.last().ok_or("Source column is empty.")?
                     },
                     LocationType::Freecell => {
                         &self.freecells.get_mut(mv.from_idx)
                             .ok_or("Invalid freecell index.")?
-                            .take()
-                            .ok_or("Freecell is empty.")?
+                            .ok_or("Freecell is empty..")?
                     },
                     _ => Err("Invalid source location for a move to foundation")?
                 };
-                
+
                 let index = match card.suit {
                     Suit::Spades => 0,
                     Suit::Hearts => 1,

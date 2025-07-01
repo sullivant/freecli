@@ -1,23 +1,23 @@
 {
   "freecells": [
     {
-      "rank": 8,
-      "suit": "Clubs"
-    },
-    {
-      "rank": 3,
-      "suit": "Diamonds"
+      "rank": 10,
+      "suit": "Hearts"
     },
     null,
-    null
+    null,
+    {
+      "rank": 4,
+      "suit": "Hearts"
+    }
   ],
   "foundations": [
+    null,
+    null,
     {
       "rank": 1,
-      "suit": "Spades"
+      "suit": "Diamonds"
     },
-    null,
-    null,
     {
       "rank": 1,
       "suit": "Clubs"
@@ -26,167 +26,123 @@
   "columns": [
     [
       {
-        "rank": 12,
-        "suit": "Hearts"
-      },
-      {
-        "rank": 13,
-        "suit": "Hearts"
-      },
-      {
-        "rank": 2,
-        "suit": "Diamonds"
-      }
-    ],
-    [
-      {
-        "rank": 7,
-        "suit": "Diamonds"
-      },
-      {
-        "rank": 11,
-        "suit": "Clubs"
-      },
-      {
-        "rank": 4,
-        "suit": "Hearts"
-      },
-      {
-        "rank": 5,
-        "suit": "Spades"
-      },
-      {
         "rank": 13,
         "suit": "Clubs"
-      },
-      {
-        "rank": 13,
-        "suit": "Spades"
-      },
-      {
-        "rank": 10,
-        "suit": "Diamonds"
-      },
-      {
-        "rank": 9,
-        "suit": "Spades"
-      }
-    ],
-    [
-      {
-        "rank": 9,
-        "suit": "Diamonds"
-      },
-      {
-        "rank": 10,
-        "suit": "Spades"
-      },
-      {
-        "rank": 2,
-        "suit": "Clubs"
-      },
-      {
-        "rank": 5,
-        "suit": "Clubs"
-      },
-      {
-        "rank": 10,
-        "suit": "Hearts"
-      },
-      {
-        "rank": 2,
-        "suit": "Spades"
-      },
-      {
-        "rank": 7,
-        "suit": "Spades"
-      }
-    ],
-    [
-      {
-        "rank": 9,
-        "suit": "Hearts"
-      },
-      {
-        "rank": 11,
-        "suit": "Spades"
       },
       {
         "rank": 6,
-        "suit": "Hearts"
+        "suit": "Spades"
       },
       {
         "rank": 5,
+        "suit": "Spades"
+      },
+      {
+        "rank": 7,
         "suit": "Hearts"
+      },
+      {
+        "rank": 13,
+        "suit": "Hearts"
+      },
+      {
+        "rank": 8,
+        "suit": "Clubs"
+      }
+    ],
+    [
+      {
+        "rank": 2,
+        "suit": "Diamonds"
       },
       {
         "rank": 3,
+        "suit": "Spades"
+      },
+      {
+        "rank": 3,
+        "suit": "Clubs"
+      },
+      {
+        "rank": 11,
         "suit": "Hearts"
       },
       {
-        "rank": 2,
+        "rank": 6,
+        "suit": "Diamonds"
+      },
+      {
+        "rank": 9,
+        "suit": "Hearts"
+      },
+      {
+        "rank": 7,
+        "suit": "Diamonds"
+      }
+    ],
+    [
+      {
+        "rank": 12,
         "suit": "Hearts"
       },
       {
         "rank": 8,
-        "suit": "Hearts"
-      }
-    ],
-    [
+        "suit": "Diamonds"
+      },
       {
         "rank": 9,
         "suit": "Clubs"
       },
       {
-        "rank": 8,
-        "suit": "Spades"
+        "rank": 3,
+        "suit": "Diamonds"
       },
       {
         "rank": 7,
-        "suit": "Hearts"
+        "suit": "Clubs"
       },
+      {
+        "rank": 6,
+        "suit": "Clubs"
+      },
+      {
+        "rank": 13,
+        "suit": "Diamonds"
+      }
+    ],
+    [
       {
         "rank": 12,
+        "suit": "Clubs"
+      },
+      {
+        "rank": 1,
         "suit": "Spades"
       },
       {
-        "rank": 6,
-        "suit": "Clubs"
-      }
-    ],
-    [
+        "rank": 4,
+        "suit": "Diamonds"
+      },
       {
-        "rank": 10,
+        "rank": 5,
         "suit": "Clubs"
       },
       {
         "rank": 11,
+        "suit": "Diamonds"
+      },
+      {
+        "rank": 10,
+        "suit": "Spades"
+      }
+    ],
+    [
+      {
+        "rank": 8,
         "suit": "Hearts"
       },
       {
-        "rank": 7,
-        "suit": "Clubs"
-      },
-      {
-        "rank": 4,
-        "suit": "Diamonds"
-      },
-      {
-        "rank": 6,
-        "suit": "Spades"
-      },
-      {
-        "rank": 8,
-        "suit": "Diamonds"
-      }
-    ],
-    [
-      {
-        "rank": 11,
-        "suit": "Diamonds"
-      },
-      {
-        "rank": 4,
+        "rank": 2,
         "suit": "Clubs"
       },
       {
@@ -194,77 +150,157 @@
         "suit": "Hearts"
       },
       {
-        "rank": 4,
+        "rank": 9,
+        "suit": "Diamonds"
+      },
+      {
+        "rank": 7,
         "suit": "Spades"
       },
       {
         "rank": 13,
-        "suit": "Diamonds"
-      },
-      {
-        "rank": 3,
-        "suit": "Clubs"
+        "suit": "Spades"
       }
     ],
     [
       {
-        "rank": 3,
+        "rank": 8,
         "suit": "Spades"
+      },
+      {
+        "rank": 11,
+        "suit": "Spades"
+      },
+      {
+        "rank": 4,
+        "suit": "Spades"
+      },
+      {
+        "rank": 12,
+        "suit": "Diamonds"
+      },
+      {
+        "rank": 12,
+        "suit": "Spades"
+      },
+      {
+        "rank": 6,
+        "suit": "Hearts"
+      }
+    ],
+    [
+      {
+        "rank": 2,
+        "suit": "Spades"
+      },
+      {
+        "rank": 3,
+        "suit": "Hearts"
+      },
+      {
+        "rank": 10,
+        "suit": "Clubs"
+      },
+      {
+        "rank": 5,
+        "suit": "Hearts"
+      },
+      {
+        "rank": 2,
+        "suit": "Hearts"
       },
       {
         "rank": 5,
         "suit": "Diamonds"
       },
       {
-        "rank": 1,
-        "suit": "Diamonds"
-      },
+        "rank": 4,
+        "suit": "Clubs"
+      }
+    ],
+    [
       {
-        "rank": 12,
+        "rank": 11,
         "suit": "Clubs"
       },
       {
-        "rank": 6,
+        "rank": 10,
         "suit": "Diamonds"
       },
       {
-        "rank": 12,
-        "suit": "Diamonds"
+        "rank": 9,
+        "suit": "Spades"
       }
     ]
   ],
   "history": [
     {
       "from": "Column",
-      "from_idx": 4,
-      "to": "Foundation",
+      "from_idx": 7,
+      "to": "Freecell",
       "to_idx": 0
     },
     {
       "from": "Column",
-      "from_idx": 0,
+      "from_idx": 7,
       "to": "Freecell",
       "to_idx": 1
+    },
+    {
+      "from": "Column",
+      "from_idx": 7,
+      "to": "Foundation",
+      "to_idx": 3
+    },
+    {
+      "from": "Freecell",
+      "from_idx": 1,
+      "to": "Foundation",
+      "to_idx": 2
+    },
+    {
+      "from": "Column",
+      "from_idx": 3,
+      "to": "Column",
+      "to_idx": 6
+    },
+    {
+      "from": "Column",
+      "from_idx": 7,
+      "to": "Freecell",
+      "to_idx": 1
+    },
+    {
+      "from": "Column",
+      "from_idx": 7,
+      "to": "Freecell",
+      "to_idx": 2
+    },
+    {
+      "from": "Column",
+      "from_idx": 7,
+      "to": "Freecell",
+      "to_idx": 3
+    },
+    {
+      "from": "Freecell",
+      "from_idx": 2,
+      "to": "Column",
+      "to_idx": 7
+    },
+    {
+      "from": "Freecell",
+      "from_idx": 1,
+      "to": "Column",
+      "to_idx": 7
     },
     {
       "from": "Column",
       "from_idx": 0,
       "to": "Column",
-      "to_idx": 1
-    },
-    {
-      "from": "Column",
-      "from_idx": 0,
-      "to": "Freecell",
-      "to_idx": 0
-    },
-    {
-      "from": "Column",
-      "from_idx": 0,
-      "to": "Foundation",
-      "to_idx": 3
+      "to_idx": 7
     }
   ],
-  "seed": 1708022884124445195,
+  "seed": 4815299385004430331,
   "last_move_error": null
 }
