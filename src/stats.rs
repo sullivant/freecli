@@ -1,7 +1,5 @@
 use std::fmt::{self, Display, Formatter};
 use serde::{Serialize, Deserialize};
-use std::fs;
-use std::io::{self, ErrorKind};
 
 #[derive(Debug, Serialize, Deserialize, Default)]
 pub struct GameStats {

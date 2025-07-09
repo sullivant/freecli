@@ -40,7 +40,7 @@ pub fn target_path(path: &str) -> String {
     } 
 
     match target_dir.as_os_str().to_str() {
-        Some(s) => format!("{}{}{}", s.to_string(), MAIN_SEPARATOR, path),
+        Some(s) => format!("{}{}{}", s, MAIN_SEPARATOR, path),
         _ => "".to_string()
     }
 }
