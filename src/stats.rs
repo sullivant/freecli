@@ -28,20 +28,6 @@ impl Display for GameStats {
 }
 
 impl GameStats {
-    // Loads .game_stats.json
-    pub fn load(path: &str) -> io::Result<Self> {
-        match fs::read_to_string(path) {
-            Ok(content) => Ok(serde_json::from_str(&content)?), // Load if ok to load...
-            Err(e) if e.kind() == ErrorKind::NotFound => Ok(GameStats::default()), // Create new if not found.
-            Err(e) => Err(e), // Bubble up any other error.  Permissions, etc.
-        }
-    }
-
-    pub fn save(&self, path: &str) -> io::Result<()> {
-        let json = serde_json::to_string_pretty(self)?;
-        fs::write(path, json)
-    }
-
     pub fn record_move(&mut self) {
         self.total_moves += 1;
     }
@@ -53,5 +39,4 @@ impl GameStats {
     pub fn record_win(&mut self) {
         self.total_games_won += 1;
     }
-
 }

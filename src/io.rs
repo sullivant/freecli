@@ -1,8 +1,23 @@
-use std::fs::{File, OpenOptions, remove_file};
-use std::io::{Read, Write};
+use std::fs::{self, remove_file, File, OpenOptions};
+use std::io::{Read, Write, ErrorKind, self};
 use crate::gamestate::GameState;
+use crate::stats::GameStats;
 use serde_json;
 
+
+pub fn load_stats(path: &str) -> io::Result<GameStats> {
+    // Loads .game_stats.json
+    match fs::read_to_string(path) {
+        Ok(content) => Ok(serde_json::from_str(&content)?), // Load if ok to load...
+        Err(e) if e.kind() == ErrorKind::NotFound => Ok(GameStats::default()), // Create new if not found.
+        Err(e) => Err(e), // Bubble up any other error.  Permissions, etc.
+    }
+}
+
+pub fn save_stats(stats: &GameStats, path: &str) -> io::Result<()> {
+    let json = serde_json::to_string_pretty(stats)?;
+    fs::write(path, json)
+}
 
 pub fn save_game(game: &GameState, path: &str) -> Result<(), Box<dyn std::error::Error>> {
     let json = serde_json::to_string_pretty(game)?;

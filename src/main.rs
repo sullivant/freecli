@@ -1,32 +1,32 @@
 use clap::Parser;
 use freecli::gamestate::GameState;
-use freecli::io::{load_game, save_game, delete_game};
+use freecli::io::{delete_game, load_game, load_stats, save_game, save_stats};
 use freecli::moves::{Move};
 use freecli::cli::{AppArgs};
 use freecli::stats::GameStats;
 use std::process;
 
-static STATS_FILE: &str = ".game_stats.json";
-static GAMESTATE_FILE: &str = "game_state.json";
+static GAME_STATS_FILE: &str = ".game_stats.json";
+static GAME_STATE_FILE: &str = ".game_state.json";
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let mut args = AppArgs::parse();
 
     // Load the stats
-    let mut stats = GameStats::load(STATS_FILE).unwrap_or_default();
+    let mut stats = load_stats(GAME_STATS_FILE)?;
 
     if args.reset {
         println!("Resetting save game file and starting fresh.");
-        let _ = delete_game(GAMESTATE_FILE);
+        let _ = delete_game(GAME_STATE_FILE);
     }
 
-    let mut game = match load_game(GAMESTATE_FILE) {
+    let mut game = match load_game(GAME_STATE_FILE) {
         Ok(g) => g,
         Err(_) => {
             args.reset = true;
             stats.record_game_start();
-            stats.save(STATS_FILE)?;
+            save_stats(&stats,GAME_STATS_FILE)?;
 
             // If we have passed a seed, use that.
             match args.seed {
@@ -125,7 +125,7 @@ pub fn cleanup(game: &GameState, stats: &GameStats, args: &AppArgs) -> Result<()
         println!("{}", game);
     }
 
-    stats.save(STATS_FILE)?;
-    save_game(game, GAMESTATE_FILE)
+    save_stats(stats, GAME_STATS_FILE)?;
+    save_game(game, GAME_STATE_FILE)
     
 }
