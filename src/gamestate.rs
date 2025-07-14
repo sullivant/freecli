@@ -56,8 +56,16 @@ impl Display for GameState {
                 }
             }
         };
-        
-        write!(f, "Freecells:   ")?;
+
+        write!(f, "\nFoundations:   ")?;
+        for cell in &self.foundations {
+            match cell {
+                Some(card) => write!(f, "[{}] ", card.display_string())?,
+                None => write!(f, "[   ] ")?,
+            }
+        }
+
+        write!(f, "\nFreecells:     ")?;
         for cell in &self.freecells {
             match cell {
                 Some(card) => write!(f, "[{}] ", card.display_string())?,
@@ -65,13 +73,6 @@ impl Display for GameState {
             }
         }
 
-        write!(f, "Foundations:   ")?;
-        for cell in &self.foundations {
-            match cell {
-                Some(card) => write!(f, "[{}] ", card.display_string())?,
-                None => write!(f, "[   ] ")?,
-            }
-        }
 
         writeln!(f, "\n\nColumns:")?;
         // Header
