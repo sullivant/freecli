@@ -1,12 +1,13 @@
 use crate::card::{Card, Suit};
 use crate::moves::{LocationType, Move};
-use console::Style;
+// use console::Style;
 use rand::{RngCore, SeedableRng};
 use serde::{Serialize, Deserialize};
 use std::fmt::{self, Display, Formatter};
 use rand::seq::SliceRandom;
 use rand::rngs::{OsRng, StdRng}; // For the seed randomization
 
+use iocraft::prelude::*;
 
 /**
  * Handles various aspects of the current and potential future game states, including:
@@ -43,58 +44,105 @@ impl Display for GameState {
     /// The display of the main game state and its formatting over various lines on the CLI
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
 
-        // Handle printing the error or the last move from the stack if the error is None
-        match &self.last_move_error {
-            Some(e) => {
-                writeln!(f,"Error: {}", e)?;
-            },
-            None => {
-                // Get last move off the history stack
-                let last_move = self.get_last_move();
-                if let Some(m) = last_move {
-                    writeln!(f, "Last Move: {}", m)?;
+        let bs = if self.last_move_error.is_some() {Color::Red} else {Color::Blue};
+        element! {
+            View(
+                border_style: BorderStyle::Round,
+                border_color: bs,
+            ) {
+                Text(content: format!("{}",self.str_last_move()))
+            }
+        }.print();
+
+        element! {
+            View() {
+                View(
+                    border_style: BorderStyle::None,
+                    // border_color: Color::Green,
+                    flex_direction: FlexDirection::Row,
+                    padding: 0,
+                    margin: 0,
+                ) {
+                    View(
+                        border_style: BorderStyle::Round,
+                        border_color: Color::Blue,
+                    ) {
+                        Text(content: format!("{}\n{}",self.str_header(), self.str_columns()))
+                    }
+                    View(
+                        // border_style: BorderStyle::Round,
+                        // border_color: Color::Red,
+                        flex_direction: FlexDirection::Column,
+                    ) {
+                        View(
+                            border_style: BorderStyle::Round,
+                            border_color: Color::Green,
+                        ) {
+                            Text(content: format!("Foundations: {}",self.str_foundation()))
+                        }                        
+                        View(
+                            border_style: BorderStyle::Round,
+                            border_color: Color::Blue,
+                        ) {
+                            Text(content: format!("Freecells:   {}",self.str_freecells()))
+                        }
+                    }
                 }
             }
-        };
+            
+        }.print();
+        
+        // // Handle printing the error or the last move from the stack if the error is None
+        // match &self.last_move_error {
+        //     Some(e) => {
+        //         writeln!(f,"Error: {}", e)?;
+        //     },
+        //     None => {
+        //         // Get last move off the history stack
+        //         let last_move = self.get_last_move();
+        //         if let Some(m) = last_move {
+        //             writeln!(f, "Last Move: {}", m)?;
+        //         }
+        //     }
+        // };
 
-        write!(f, "\nFoundations:   ")?;
-        for cell in &self.foundations {
-            match cell {
-                Some(card) => write!(f, "[{}] ", card.display_string())?,
-                None => write!(f, "[   ] ")?,
-            }
-        }
+        // write!(f, "\nFoundations:   ")?;
+        // for cell in &self.foundations {
+        //     match cell {
+        //         Some(card) => write!(f, "[{}] ", card.display_string())?,
+        //         None => write!(f, "[   ] ")?,
+        //     }
+        // }
 
-        write!(f, "\nFreecells:     ")?;
-        for cell in &self.freecells {
-            match cell {
-                Some(card) => write!(f, "[{}] ", card.display_string())?,
-                None => write!(f, "[   ] ")?,
-            }
-        }
+        // write!(f, "\nFreecells:     ")?;
+        // for cell in &self.freecells {
+        //     match cell {
+        //         Some(card) => write!(f, "[{}] ", card.display_string())?,
+        //         None => write!(f, "[   ] ")?,
+        //     }
+        // }
 
 
-        writeln!(f, "\n\nColumns:")?;
-        // Header
-        for i in 0..8 {
-            let styled = Style::new().underlined().bold().apply_to(format!("C{}", i));
-            write!(f, " {}  ",styled)?;
-        }
-        writeln!(f)?;
+        // writeln!(f, "\n\nColumns:")?;
+        // // Header
+        // for i in 0..8 {
+        //     write!(f, " C{}  ",i)?;
+        // }
+        // writeln!(f)?;
 
-        let max_height = self.columns.iter().map(|col| col.len()).max().unwrap_or(0);
+        // let max_height = self.columns.iter().map(|col| col.len()).max().unwrap_or(0);
 
-        // Row by row
-        for row in 0..max_height {
-            for col in &self.columns {
-                if row < col.len() {
-                    write!(f, "{:>3}  ", col[row].display_string())?;
-                } else {
-                    write!(f, "     ")?;
-                }
-            }
-            writeln!(f)?;
-        }
+        // // Row by row
+        // for row in 0..max_height {
+        //     for col in &self.columns {
+        //         if row < col.len() {
+        //             write!(f, "{:>3}  ", col[row].display_string())?;
+        //         } else {
+        //             write!(f, "     ")?;
+        //         }
+        //     }
+        //     writeln!(f)?;
+        // }
 
         Ok(())
     }
@@ -103,6 +151,81 @@ impl Display for GameState {
 
 
 impl GameState {
+    pub fn str_last_move(&self) -> String {
+        let mut retval = String::new();
+
+        match &self.last_move_error {
+            Some(e) => {
+                retval.push_str(&format!("{}", e));
+            },
+            None => {
+                // Get last move off the history stack
+                let last_move = self.get_last_move();
+                if let Some(m) = last_move {
+                    retval.push_str(&format!("Last Move: {}", m));
+                }
+            }
+        };
+
+        retval
+    }
+
+    pub fn str_freecells(&self) -> String {
+        let mut retval = String::new();
+
+        for cell in &self.freecells {
+            match cell {
+                Some(card) => retval.push_str(&format!("[{}] ", card.display_string())),
+                None => retval.push_str(&format!("[   ] ")),
+            }
+        };
+        retval
+
+    }
+
+    pub fn str_foundation(&self) -> String {
+        let mut retval = String::new();
+        for cell in &self.foundations {
+            match cell {
+                Some(card) => retval.push_str(&format!("[{}] ", card.display_string())),
+                None => retval.push_str(&format!("[   ] ")),
+            }
+        }
+
+        retval
+    }
+
+    pub fn str_header(&self) -> String {
+        let mut retval = String::new();
+
+        // Header
+        for i in 0..8 {
+            retval.push_str(&format!("{:>4} ",format!("C{}",i)));
+        }
+        retval
+    }
+
+    pub fn str_columns(&self) -> String {
+        let mut retval: String = String::new();
+
+        let max_height = self.columns.iter().map(|col| col.len()).max().unwrap_or(0);
+
+        // Row by row
+        for row in 0..max_height {
+            for col in &self.columns {
+                if row < col.len() {
+                    retval.push_str(&format!("{:>4} ", col[row].display_string()));
+                } else {
+                    retval.push_str(&format!("{:>4} "," "));
+                }
+            }
+            retval.push_str(&String::from("\n"));
+        }
+
+        retval
+
+    }
+
     /// Resets gamestate to an empty board with cards dealt into the columns.
     pub fn reset(seed: Option<u64>) -> GameState {
         let mut columns: [Vec<Card>; 8] = Default::default();

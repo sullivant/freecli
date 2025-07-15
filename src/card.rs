@@ -1,5 +1,6 @@
-use console::Style;
 use serde::{Serialize, Deserialize};
+use colored::Colorize;
+
 
 #[derive(Copy, Clone, Debug, Serialize, Deserialize)]
 pub enum Suit {
@@ -37,8 +38,8 @@ impl Card {
         };
 
         let styled = match self.suit {
-            Suit::Hearts | Suit::Diamonds => Style::new().red().apply_to(format!("{:>2}{}", rank, suit_char)),
-            Suit::Clubs | Suit::Spades => Style::new().apply_to(format!("{}{}", rank, suit_char)),
+            Suit::Hearts | Suit::Diamonds => format!("{:>3}{}", rank, suit_char),
+            Suit::Clubs | Suit::Spades => format!("{:>3}{}", rank, suit_char),
         };
 
         styled.to_string()
