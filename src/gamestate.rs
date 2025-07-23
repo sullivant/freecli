@@ -36,23 +36,41 @@ fn get_foundation_index(card: Card) -> usize {
         Suit::Spades => 0,
         Suit::Hearts => 1,
         Suit::Diamonds => 2,
-        Suit::Clubs => 3
+        Suit::Clubs => 3,
+        _ => 0,
     }
 }
 
+
 impl Display for GameState {
     /// The display of the main game state and its formatting over various lines on the CLI
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, _f: &mut Formatter<'_>) -> fmt::Result {
 
-        let bs = if self.last_move_error.is_some() {Color::Red} else {Color::Blue};
-        element! {
-            View(
-                border_style: BorderStyle::Round,
-                border_color: bs,
-            ) {
-                Text(content: format!("{}",self.str_last_move()))
+        // For the display of our last move
+        let last_move_color = if self.last_move_error.is_some() {Color::Red} else {Color::Blue};
+        let last_move_border = if self.last_move_error.is_some() {BorderStyle::Double} else {BorderStyle::Single};
+        
+        // Needed in various places.
+        let empty_card = Card::new(0, Suit::None);
+
+        // This determines the max number of rows we'll need to work on displaying.
+        let max_height = self.columns.iter().map(|col| col.len()).max().unwrap_or(0);
+        // Row by row we can create a series of card elements and push them onto a vec for display
+        let mut tableau: Vec<Vec<Card>> = vec![];
+
+        for row in 0..max_height {
+            let mut this_row: Vec<Card> = vec![];
+            for col in &self.columns {
+                if row < col.len() {
+                    this_row.push(col[row]);
+                } else {
+                    this_row.push(empty_card);
+                }
             }
-        }.print();
+            
+            // Now push this row into the bigger vec
+            tableau.push(this_row);
+        }
 
         element! {
             View() {
@@ -63,87 +81,58 @@ impl Display for GameState {
                     padding: 0,
                     margin: 0,
                 ) {
-                    View(
-                        border_style: BorderStyle::Round,
-                        border_color: Color::Blue,
-                    ) {
-                        Text(content: format!("{}\n{}",self.str_header(), self.str_columns()))
-                    }
+                    // Tableau
+                    View (
+                        flex_direction:FlexDirection::Column, 
+                        border_style: BorderStyle::None, border_color: Color::Red,
+                        margin_right: 3, margin_top: 1,
+                    ){
+                        #(  
+                            tableau.iter().map(|row| {
+                                element!{
+                                    View(border_style: BorderStyle::None, border_color: Color::Blue){
+                                        #(
+                                            row.iter().map(|this_card| {
+                                                this_card.as_element()
+                                            })
+                                        )
+                                    }
+                                }
+                            })
+                        )
+                    }                    
+
+                    // Right side panels
                     View(
                         // border_style: BorderStyle::Round,
                         // border_color: Color::Red,
                         flex_direction: FlexDirection::Column,
                     ) {
                         View(
-                            border_style: BorderStyle::Round,
+                            border_style: BorderStyle::Single,
                             border_color: Color::Green,
                         ) {
                             Text(content: format!("Foundations: {}",self.str_foundation()))
                         }                        
                         View(
-                            border_style: BorderStyle::Round,
+                            border_style: BorderStyle::Single,
                             border_color: Color::Blue,
                         ) {
                             Text(content: format!("Freecells:   {}",self.str_freecells()))
                         }
+                        View(
+                            border_style: last_move_border,
+                            border_color: last_move_color,
+                        ) {
+                            Text(content: format!("{}",self.str_last_move()))
+                        }
+
                     }
                 }
             }
             
         }.print();
         
-        // // Handle printing the error or the last move from the stack if the error is None
-        // match &self.last_move_error {
-        //     Some(e) => {
-        //         writeln!(f,"Error: {}", e)?;
-        //     },
-        //     None => {
-        //         // Get last move off the history stack
-        //         let last_move = self.get_last_move();
-        //         if let Some(m) = last_move {
-        //             writeln!(f, "Last Move: {}", m)?;
-        //         }
-        //     }
-        // };
-
-        // write!(f, "\nFoundations:   ")?;
-        // for cell in &self.foundations {
-        //     match cell {
-        //         Some(card) => write!(f, "[{}] ", card.display_string())?,
-        //         None => write!(f, "[   ] ")?,
-        //     }
-        // }
-
-        // write!(f, "\nFreecells:     ")?;
-        // for cell in &self.freecells {
-        //     match cell {
-        //         Some(card) => write!(f, "[{}] ", card.display_string())?,
-        //         None => write!(f, "[   ] ")?,
-        //     }
-        // }
-
-
-        // writeln!(f, "\n\nColumns:")?;
-        // // Header
-        // for i in 0..8 {
-        //     write!(f, " C{}  ",i)?;
-        // }
-        // writeln!(f)?;
-
-        // let max_height = self.columns.iter().map(|col| col.len()).max().unwrap_or(0);
-
-        // // Row by row
-        // for row in 0..max_height {
-        //     for col in &self.columns {
-        //         if row < col.len() {
-        //             write!(f, "{:>3}  ", col[row].display_string())?;
-        //         } else {
-        //             write!(f, "     ")?;
-        //         }
-        //     }
-        //     writeln!(f)?;
-        // }
-
         Ok(())
     }
 
@@ -156,7 +145,7 @@ impl GameState {
 
         match &self.last_move_error {
             Some(e) => {
-                retval.push_str(&format!("{}", e));
+                retval.push_str(&e.to_string());
             },
             None => {
                 // Get last move off the history stack
@@ -176,7 +165,7 @@ impl GameState {
         for cell in &self.freecells {
             match cell {
                 Some(card) => retval.push_str(&format!("[{}] ", card.display_string())),
-                None => retval.push_str(&format!("[   ] ")),
+                None => retval.push_str("[   ] "),
             }
         };
         retval
@@ -188,7 +177,7 @@ impl GameState {
         for cell in &self.foundations {
             match cell {
                 Some(card) => retval.push_str(&format!("[{}] ", card.display_string())),
-                None => retval.push_str(&format!("[   ] ")),
+                None => retval.push_str("[   ] "),
             }
         }
 
@@ -354,7 +343,8 @@ impl GameState {
                     Suit::Spades => 0,
                     Suit::Hearts => 1,
                     Suit::Diamonds => 2,
-                    Suit::Clubs => 3
+                    Suit::Clubs => 3,
+                    _ => Err("Invalid source location for a move to foundation")?
                 };
 
                 let foundation = &mut self.foundations[index];
@@ -416,7 +406,8 @@ impl GameState {
                     Suit::Spades => 0,
                     Suit::Hearts => 1,
                     Suit::Diamonds => 2,
-                    Suit::Clubs => 3
+                    Suit::Clubs => 3,
+                    _ => Err("Invalid source location for a move to foundation")?
                 };
 
                 // Update the move with the updated index

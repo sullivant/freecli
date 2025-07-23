@@ -6,8 +6,6 @@ use freecli::cli::{AppArgs};
 use freecli::stats::GameStats;
 use std::process;
 
-use console::Style;
-
 fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let mut args = AppArgs::parse();
