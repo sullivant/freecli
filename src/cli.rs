@@ -33,7 +33,6 @@ pub struct AppArgs {
 
 #[derive(Debug, Clone, ValueEnum)]
 pub enum LocationArg {
-    C0,
     C1,
     C2,
     C3,
@@ -41,11 +40,12 @@ pub enum LocationArg {
     C5,
     C6,
     C7,
+    C8,
     
-    F0,
     F1,
     F2,
     F3,
+    F4,
 
     Foundation,
     Fnd,

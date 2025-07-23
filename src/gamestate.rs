@@ -60,7 +60,7 @@ impl Display for GameState {
 
         // First insert an initial row of "column label" cards.
         let mut header_row: Vec<Card> = vec![];
-        for v in 0..8 {
+        for v in 1..9 {
             let this_card = Card::new(v, Suit::Header);
             header_row.push(this_card);
         }

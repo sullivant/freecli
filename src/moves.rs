@@ -68,19 +68,19 @@ impl Move {
 pub fn convert_location_arg(arg: &LocationArg) -> (LocationType, usize) {
     use LocationArg::*;
     match arg {
-        C0 => (LocationType::Column, 0),
-        C1 => (LocationType::Column, 1),
-        C2 => (LocationType::Column, 2),
-        C3 => (LocationType::Column, 3),
-        C4 => (LocationType::Column, 4),
-        C5 => (LocationType::Column, 5),
-        C6 => (LocationType::Column, 6),
-        C7 => (LocationType::Column, 7),
+        C1 => (LocationType::Column, 0),
+        C2 => (LocationType::Column, 1),
+        C3 => (LocationType::Column, 2),
+        C4 => (LocationType::Column, 3),
+        C5 => (LocationType::Column, 4),
+        C6 => (LocationType::Column, 5),
+        C7 => (LocationType::Column, 6),
+        C8 => (LocationType::Column, 7),
 
-        F0 => (LocationType::Freecell, 0),
-        F1 => (LocationType::Freecell, 1),
-        F2 => (LocationType::Freecell, 2),
-        F3 => (LocationType::Freecell, 3),
+        F1 => (LocationType::Freecell, 0),
+        F2 => (LocationType::Freecell, 1),
+        F3 => (LocationType::Freecell, 2),
+        F4 => (LocationType::Freecell, 3),
 
         Foundation | Fnd => (LocationType::Foundation, 0),
     }
