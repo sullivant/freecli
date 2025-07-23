@@ -47,16 +47,21 @@ impl Display for GameState {
     fn fmt(&self, _f: &mut Formatter<'_>) -> fmt::Result {
 
         // For the display of our last move
-        let last_move_color = if self.last_move_error.is_some() {Color::Red} else {Color::Blue};
+        let last_move_color = if self.last_move_error.is_some() {Color::Red} else {Color::White};
         let last_move_border = if self.last_move_error.is_some() {BorderStyle::Double} else {BorderStyle::Single};
         
+
+        // Vector preparation for freecells, foundation, and tableau
+        let foundation = self.foundation_as_vec();
+        let freecells = self.freecells_as_vec();
+        let mut tableau: Vec<Vec<Card>> = vec![];
+
         // Needed in various places.
         let empty_card = Card::new(0, Suit::None);
 
         // This determines the max number of rows we'll need to work on displaying.
         let max_height = self.columns.iter().map(|col| col.len()).max().unwrap_or(0);
         // Row by row we can create a series of card elements and push them onto a vec for display
-        let mut tableau: Vec<Vec<Card>> = vec![];
 
         // First insert an initial row of "column label" cards.
         let mut header_row: Vec<Card> = vec![];
@@ -116,17 +121,21 @@ impl Display for GameState {
                         // border_color: Color::Red,
                         flex_direction: FlexDirection::Column,
                     ) {
-                        View(
-                            border_style: BorderStyle::Single,
-                            border_color: Color::Green,
-                        ) {
-                            Text(content: format!("Foundations: {}",self.str_foundation()))
+                        View(border_style: BorderStyle::Single, border_color: Color::Green){
+                            View(width:12){ Text(content:"Foundations")}
+                            #(
+                                foundation.iter().map(|this_card| {
+                                    this_card.as_element()
+                                })
+                            )
                         }                        
-                        View(
-                            border_style: BorderStyle::Single,
-                            border_color: Color::Blue,
-                        ) {
-                            Text(content: format!("Freecells:   {}",self.str_freecells()))
+                        View(border_style: BorderStyle::Single, border_color: Color::Blue){
+                            View(width:12){ Text(content:"Freecells")}
+                            #(
+                                freecells.iter().map(|this_card| {
+                                    this_card.as_element()
+                                })
+                            )
                         }
                         View(
                             border_style: last_move_border,
@@ -140,7 +149,7 @@ impl Display for GameState {
             }
             
         }.print();
-        
+
         Ok(())
     }
 
@@ -180,6 +189,20 @@ impl GameState {
 
     }
 
+    pub fn freecells_as_vec(&self) -> Vec<Card> {
+        let empty_card = Card::new(0, Suit::None);
+        let mut vec_fnds: Vec<Card> = vec![];
+        for cell in &self.freecells {
+            match cell {
+                Some(card) => vec_fnds.push(*card),
+                None => vec_fnds.push(empty_card),
+            }
+        }
+        vec_fnds
+    }
+
+
+
     pub fn str_foundation(&self) -> String {
         let mut retval = String::new();
         for cell in &self.foundations {
@@ -190,6 +213,18 @@ impl GameState {
         }
 
         retval
+    }
+
+    pub fn foundation_as_vec(&self) -> Vec<Card> {
+        let empty_card = Card::new(0, Suit::None);
+        let mut vec_fnds: Vec<Card> = vec![];
+        for cell in &self.foundations {
+            match cell {
+                Some(card) => vec_fnds.push(*card),
+                None => vec_fnds.push(empty_card),
+            }
+        }
+        vec_fnds
     }
 
     pub fn str_header(&self) -> String {
