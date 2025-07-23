@@ -8,7 +8,8 @@ pub enum Suit {
     Hearts,
     Diamonds,
     Clubs,
-    None,
+    None, // For the "empty" cards on the tableau, so they have the same spaces.
+    Header, // For header display
 }
 
 #[derive(Copy, Clone, Debug, Serialize, Deserialize)]
@@ -32,7 +33,13 @@ impl Card {
                         Suit::Hearts | Suit::Diamonds => Color::Red,
                         Suit::Clubs | Suit::Spades => Color::Black,
                         Suit::None => Color::Black,
-                    }
+                        Suit::Header => Color::White,
+                    },
+                    decoration: match self.suit {
+                        Suit::Header => TextDecoration::Underline,
+                        _ => TextDecoration::None,
+                    },
+                        
                 )
             }
         }
@@ -53,13 +60,15 @@ impl Card {
             Suit::Hearts => '\u{2665}',
             Suit::Diamonds => '\u{2666}',
             Suit::Clubs => '\u{2663}',
-            Suit::None => ' '
+            Suit::None => ' ',
+            Suit::Header => '*',
         };
 
         let styled = match self.suit {
             Suit::Hearts | Suit::Diamonds => format!("{:>3}{}", rank, suit_char),
             Suit::Clubs | Suit::Spades => format!("{:>3}{}", rank, suit_char),
             Suit::None => format!("{:>3}{}", rank, suit_char),
+            Suit::Header => format!("{:>3}{}", self.rank, suit_char),
         };
 
         styled.to_string()

@@ -58,6 +58,14 @@ impl Display for GameState {
         // Row by row we can create a series of card elements and push them onto a vec for display
         let mut tableau: Vec<Vec<Card>> = vec![];
 
+        // First insert an initial row of "column label" cards.
+        let mut header_row: Vec<Card> = vec![];
+        for v in 0..8 {
+            let this_card = Card::new(v, Suit::Header);
+            header_row.push(this_card);
+        }
+        tableau.push(header_row);
+
         for row in 0..max_height {
             let mut this_row: Vec<Card> = vec![];
             for col in &self.columns {
