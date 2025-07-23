@@ -35,11 +35,11 @@ impl Display for Move {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         let source = match self.from {
             LocationType::Foundation => format!("{}", self.from),
-            _ => format!("{}{}", self.from, self.from_idx)
+            _ => format!("{}{}", self.from, self.from_idx+1)
         };
         let target = match self.to {
             LocationType::Foundation => format!("{}", self.to),
-            _ => format!("{}{}", self.to, self.to_idx)
+            _ => format!("{}{}", self.to, self.to_idx+1)
         };
 
         write!(f,"{} -> {}", source, target)?;

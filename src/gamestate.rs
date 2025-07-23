@@ -145,7 +145,7 @@ impl Display for GameState {
                         }
 
                     }
-                }
+                } 
             }
             
         }.print();
@@ -176,19 +176,6 @@ impl GameState {
         retval
     }
 
-    pub fn str_freecells(&self) -> String {
-        let mut retval = String::new();
-
-        for cell in &self.freecells {
-            match cell {
-                Some(card) => retval.push_str(&format!("[{}] ", card.display_string())),
-                None => retval.push_str("[   ] "),
-            }
-        };
-        retval
-
-    }
-
     pub fn freecells_as_vec(&self) -> Vec<Card> {
         let empty_card = Card::new(0, Suit::None);
         let mut vec_fnds: Vec<Card> = vec![];
@@ -201,20 +188,6 @@ impl GameState {
         vec_fnds
     }
 
-
-
-    pub fn str_foundation(&self) -> String {
-        let mut retval = String::new();
-        for cell in &self.foundations {
-            match cell {
-                Some(card) => retval.push_str(&format!("[{}] ", card.display_string())),
-                None => retval.push_str("[   ] "),
-            }
-        }
-
-        retval
-    }
-
     pub fn foundation_as_vec(&self) -> Vec<Card> {
         let empty_card = Card::new(0, Suit::None);
         let mut vec_fnds: Vec<Card> = vec![];
@@ -225,37 +198,6 @@ impl GameState {
             }
         }
         vec_fnds
-    }
-
-    pub fn str_header(&self) -> String {
-        let mut retval = String::new();
-
-        // Header
-        for i in 0..8 {
-            retval.push_str(&format!("{:>4} ",format!("C{}",i)));
-        }
-        retval
-    }
-
-    pub fn str_columns(&self) -> String {
-        let mut retval: String = String::new();
-
-        let max_height = self.columns.iter().map(|col| col.len()).max().unwrap_or(0);
-
-        // Row by row
-        for row in 0..max_height {
-            for col in &self.columns {
-                if row < col.len() {
-                    retval.push_str(&format!("{:>4} ", col[row].display_string()));
-                } else {
-                    retval.push_str(&format!("{:>4} "," "));
-                }
-            }
-            retval.push_str(&String::from("\n"));
-        }
-
-        retval
-
     }
 
     /// Resets gamestate to an empty board with cards dealt into the columns.
