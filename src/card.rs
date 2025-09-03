@@ -31,7 +31,7 @@ impl Card {
                     content: self.display_string(),
                     color: match self.suit {
                         Suit::Hearts | Suit::Diamonds => Color::Red,
-                        Suit::Clubs | Suit::Spades => Color::Black,
+                        Suit::Clubs | Suit::Spades => Color::Grey,
                         Suit::None => Color::Black,
                         Suit::Header => Color::White,
                     },
